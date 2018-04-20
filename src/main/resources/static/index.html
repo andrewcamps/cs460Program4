@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Program4</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<h1>
+		What's your name?
+		<br>
+		<input id="text" type="text" name="name">
+    	<br>
+    	Get your greeting 
+		<button type="submit" onclick="getGreeting()">here</button>
+    </h1>
+</form>
+	<script type="text/javascript">
+		function getGreeting(){
+			var value = document.getElementById('text').value;
+			console.log(value);
+			window.location.href = "/greeting?name=" + value;
+		}
+	</script>
+</body>
+</html>
