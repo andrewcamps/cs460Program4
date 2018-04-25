@@ -16,7 +16,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Controller
-public class GreetingController {
+public class MainController {
 
 	@Autowired
     private DataSource dataSource;
@@ -34,6 +34,23 @@ public class GreetingController {
         String sql = "insert into people values (?)";
         jdbcTemplate.update(sql, name);
         return "greeting";
+    }
+
+@GetMapping("/addPerson")
+    public String addPerson(){
+        return "addPerson";        
+    }
+@GetMapping("/addLease")
+    public String addLease(){
+        return "addLease";        
+    }
+@GetMapping("/updateRent")
+    public String updateRent(){
+        return "updateRent";        
+    }
+@GetMapping("/deleteStudent")
+    public String deleteStudent(){
+        return "deleteStudent";        
     }
 
 }
