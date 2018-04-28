@@ -1,7 +1,79 @@
 <DOCTYPE! html>
 	<head>
-		<title> Add Student/Staff </title>
+	<title> Add Student/Staff </title>
+		<script
+  src="https://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous"></script>
+		<script type="text/javascript">
+		    $( document ).ready(function() {
+		    	console.log("test");
+		         $( "#newStaff" ).on( "submit", function( event ) {
+		 				event.preventDefault();
+		  				console.log( $( this ).serialize() );
+				});
+		         $( "#newStudent" ).on( "submit", function( event ) {
+		 				event.preventDefault();
+		  				console.log( $( this ).serialize() );
+				});
+		    })
+
+        </script>
 	</head>
 	<body>
+			
+		<form name="newStaff" id="newStaff">
+			<h1>Add Staff</h1><hr>
+			<label>Staff ID</label>
+			<input name="StaffID"><hr>
+			<label>Name</label>
+			<input name="Name"><hr>
+			<label>Email</label>
+			<input name="Email"><hr>
+			<label>Address</label>
+			<input name="Address"><hr>
+			<label>Date of Birth</label>
+			<input name="DOB"><hr>
+			<label>Gender</label>
+			<input name="Gender"><hr>
+			<label>Title</label>
+			<input name="Title"><hr>
+			<label>Location</label>
+			<input name="Location"><hr>
+			<button type="submit">Submit!</button>
+		</form>
+
+		<form name="newStudent" id="newStudent">
+			<h1>Add Student</h1><hr>
+			<label>Student ID</label>
+			<input name="StudentID"><hr>
+			<label>Name</label>
+			<input name="Name"><hr>
+			<label>Email</label>
+			<input name="Email"><hr>
+			<label>Address</label>
+			<input name="Address"><hr>
+			<label>Phone Number</label>
+			<input name="Phone"><hr>
+			<label>Date of Birth</label>
+			<input name="DOB"><hr>
+			<label>Gender</label>
+			<input name="Gender"><hr>
+			<label>Category</label>
+			<input name="Category"><hr>
+			<label>Major</label>
+			<input name="Major"><hr>
+			<label>Minor</label>
+			<input name="Minor"><hr>
+			<label>Advisor ID</label>
+			<input name="AdvisorID"><hr>
+			<button type="submit">Submit!</button>
+		</form>
 	</body>
+	<script type="text/javascript">
+    function submitStudent(){
+        		var formData = JSON.stringify($("#newStudent").serializeArray());
+        		console.log(formData);
+        }
+        </script>
 </html>
