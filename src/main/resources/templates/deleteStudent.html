@@ -1,7 +1,32 @@
 <DOCTYPE! html>
 	<head>
 		<title> Delete Student </title>
+		
+		<script
+  		src="https://code.jquery.com/jquery-3.3.1.js"
+  		integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  		crossorigin="anonymous">
+		</script>
+			
+		<script type="text/javascript">
+			$( document ).ready(function() {
+
+				$( "#deleteStudent" ).on( "submit", function( event ) {
+					event.preventDefault();
+				});
+				
+			})
+		</script>
+		
 	</head>
 	<body>
+		<form name="deleteStudent" id="deleteStudent">
+			<h1>Delete Student</h1><hr>
+			<label>Student ID</label>
+			<input name="StudentID"><hr>
+			<label>Name</label>
+			<input name="Name"><hr>
+			<button type="submit">Submit!</button>
+		</form>
 	</body>
 </html>

@@ -1,30 +1,34 @@
 <DOCTYPE! html>
 	<head>
-	<title> Add Student/Staff </title>
+		<title> Add Student/Staff </title>
 		<script
-  src="https://code.jquery.com/jquery-3.3.1.js"
-  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
-  crossorigin="anonymous"></script>
+			src="https://code.jquery.com/jquery-3.3.1.js"
+			integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+			crossorigin="anonymous">
+		</script>
+			
 		<script type="text/javascript">
-		    $( document ).ready(function() {
-		    	console.log("test");
-		         $( "#newStaff" ).on( "submit", function( event ) {
-						event.preventDefault();
-		  				console.log( $( this ).serialize() );
-		 				$.get( "/addPerson/postStaff?"+$( this ).serialize() , function() {
-  							alert( "Staff Saved!" );
-						})
-				});
-		         $( "#newStudent" ).on( "submit", function( event ) {
-		 				event.preventDefault();
-		  				console.log( $( this ).serialize() );
-		  				$.get( "/addPerson/postStudent?"+$( this ).serialize() , function() {
-  							alert( "Student Saved!" );
-						})
-				});
-		    })
+			$( document ).ready(function() {
 
-        </script>
+				$( "#newStaff" ).on( "submit", function( event ) {
+					event.preventDefault();
+					console.log( $( this ).serialize() );
+					$.get( "/addPerson/postStaff?"+$( this ).serialize() , function() {
+						alert( "Staff Saved!" );
+					})
+				});
+			  
+				$( "#newStudent" ).on( "submit", function( event ) {
+					event.preventDefault();
+					console.log( $( this ).serialize() );
+					$.get( "/addPerson/postStudent?"+$( this ).serialize() , function() {
+							alert( "Student Saved!" );
+					})
+				});
+				
+			})
+		</script>
+		
 	</head>
 	<body>
 			
@@ -76,10 +80,11 @@
 			<button type="submit">Submit!</button>
 		</form>
 	</body>
+	
 	<script type="text/javascript">
     function submitStudent(){
-        		var formData = JSON.stringify($("#newStudent").serializeArray());
-        		console.log(formData);
-        }
-        </script>
+			var formData = JSON.stringify($("#newStudent").serializeArray());
+      console.log(formData);
+    }
+	</script>
 </html>
