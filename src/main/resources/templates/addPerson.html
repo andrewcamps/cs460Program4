@@ -9,12 +9,18 @@
 		    $( document ).ready(function() {
 		    	console.log("test");
 		         $( "#newStaff" ).on( "submit", function( event ) {
-		 				event.preventDefault();
+						event.preventDefault();
 		  				console.log( $( this ).serialize() );
+		 				$.get( "/addPerson/postStaff?"+$( this ).serialize() , function() {
+  							alert( "Staff Saved!" );
+						})
 				});
 		         $( "#newStudent" ).on( "submit", function( event ) {
 		 				event.preventDefault();
 		  				console.log( $( this ).serialize() );
+		  				$.get( "/addPerson/postStudent?"+$( this ).serialize() , function() {
+  							alert( "Student Saved!" );
+						})
 				});
 		    })
 
