@@ -71,7 +71,6 @@ public class MainController {
 		public String Info(){
 			System.out.println("HERE");
 			List<String> info = getHallInfo();
-			System.out.println(info.size());
 			
 			for(String temp : info) {
 				System.out.println(temp);
@@ -90,10 +89,12 @@ public class MainController {
 				    List<String> list = new ArrayList<String>();
 				    while (rs.next()){
 				        String info = "";
-								info += rs.getString(1);
-								info += rs.getString(2);
-								info += rs.getString(3);
-								info += rs.getString(4);
+								info += rs.getString("NAME");
+								info += rs.getString("FIRSTNAME");
+								info += rs.getString("LASTNAME");
+								info += rs.getString("PHONE");
+								
+								System.out.println(info);
 				        list.add(info);
 				    }
 				    return list;
