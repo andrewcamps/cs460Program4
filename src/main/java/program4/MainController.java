@@ -71,7 +71,7 @@ public class MainController {
 		public String Info(){
 			String sql = "select name from residence_hall";
 			
-			List<String> info = jdbcTemplate.query(sql, new RowMapper<String>() {
+			List<String> info = this.jdbcTemplate.query(sql, new RowMapper<String>() {
           public String mapRow(ResultSet rs, int rowNum) throws SQLException {
               String info = rs.getString("name");
               return info;
