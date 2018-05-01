@@ -11,6 +11,9 @@
 					$( "#newLease" ).on( "submit", function( event ) {
 						event.preventDefault();
 						console.log( $( this ).serialize() );
+						$.get( "/addLease/postLease?"+$( this ).serialize() , function() {
+							alert( "Lease Saved!" );
+						})
 					});
 		    })
 
@@ -23,8 +26,10 @@
 			<input name="LeaseID" required><hr>
 			<label>Duration</label>
 			<input name="Duration" required><hr>
-			<label>Student Name</label>
-			<input type="text" name="StudentName" required><hr>
+			<label>First Name</label>
+			<input type="text" name="FirstName" required><hr>
+			<label>Last Name</label>
+			<input type="text" name="LastName" required><hr>
 			<label>Monthly Cost</label>
 			<input type="text" name="Cost" required><hr>
 			<label>Start Date (DD/MM/YYYY)</label>

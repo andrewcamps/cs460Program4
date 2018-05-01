@@ -35,20 +35,27 @@ public class MainController {
     }
 
    	@GetMapping("/addPerson/postStudent")
-    public String postStudent(@RequestParam int StudentID, @RequestParam String Name, @RequestParam String Address, @RequestParam String Phone, @RequestParam String Email, @RequestParam String Gender, @RequestParam String DOB, @RequestParam String Category, @RequestParam String Major, @RequestParam String Minor, @RequestParam int AdvisorID, Model model) {
-        String sql = "insert into Student values (?,?,?,?,?,?,?,?,?,?,?)";
+    public String postStudent(@RequestParam int StudentID, @RequestParam String FirstName,@RequestParam String LastName, @RequestParam String Address, @RequestParam String Phone, @RequestParam String Email, @RequestParam String Gender, @RequestParam String DOB, @RequestParam String Category, @RequestParam String Major, @RequestParam String Minor, @RequestParam int AdvisorID, Model model) {
+        String sql = "insert into Student values (?,?,?,?,?,?,?,?,?,?,?,?)";
 				java.sql.Date sqlDate = new java.sql.Date(new java.util.Date().getTime());
-        jdbcTemplate.update(sql, StudentID, Name, Address, Phone, Email, Gender,sqlDate, Category, Major, Minor, AdvisorID);
+        jdbcTemplate.update(sql, StudentID, FirstName,LastName, Address, Phone, Email, Gender,DOB, Category, Major, Minor, AdvisorID);
         return "addPerson";
     }
 		
 		@GetMapping("/addPerson/postStaff")
-    public String postStaff(@RequestParam int StaffID, @RequestParam String Name, @RequestParam String Email, @RequestParam String Address, @RequestParam String DOB, @RequestParam String Gender, @RequestParam String Title, @RequestParam String Location, Model model) {
-        String sql = "insert into Staff values (?,?,?,?,?,?,?,?)";
+    public String postStaff(@RequestParam int StaffID, @RequestParam String FirstName,@RequestParam String LastName, @RequestParam String Email, @RequestParam String Address, @RequestParam String DOB, @RequestParam String Gender, @RequestParam String Title, @RequestParam String Location, Model model) {
+        String sql = "insert into Staff values (?,?,?,?,?,?,?,?,?)";
 				java.sql.Date sqlDate = new java.sql.Date(new java.util.Date().getTime());
-        jdbcTemplate.update(sql,StaffID, Name, Email, Address, sqlDate, Gender, Title, Location);
+        jdbcTemplate.update(sql,StaffID, FirstName,LastName, Email, Address, sqlDate, Gender, Title, Location);
         return "addPerson";
     }
+@GetMapping("/addLease/postLease")
+    public String postLease(@RequestParam int LeaseID, @RequestParam int Duration, @RequestParam String FirstName, @RequestParam String LastName, @RequestParam float Cost, @RequestParam String StartDate, @RequestParam int StudentID, @RequestParam int RoomID, Model model) {
+        String sql = "insert into Lease values (?,?,?,?,?,?,?,?)";
+        jdbcTemplate.update(sql,LeaseID, Duration, FirstName, LastName,Cost,StartDate,StudentID,RoomID);
+        return "addLease";
+    }
+
 
 		@GetMapping("/addLease")
     public String addLease(){
