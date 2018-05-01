@@ -71,7 +71,7 @@ public class MainController {
 		public String Info(){
 			System.out.println("HERE");
 			List<String> info = getHallInfo();
-			System.out.printlin(info.size());
+			System.out.println(info.size());
 			
 			for(String temp : info) {
 				System.out.println(temp);
