@@ -68,6 +68,7 @@ public class MainController {
 		
 		@GetMapping("/hallInfo")
 		public String Info(){
+			System.out.println("HERE");
 			List<String> info = getHallInfo();
 			
 			for(String temp : info) {
