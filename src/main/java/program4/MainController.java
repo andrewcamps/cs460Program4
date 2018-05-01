@@ -35,10 +35,10 @@ public class MainController {
     }
 
    	@GetMapping("/addPerson/postStudent")
-    public String postStudent(@RequestParam int StudentID, @RequestParam String Name, @RequestParam String Address, @RequestParam String Phone, @RequestParam String Email, @RequestParam String Gender, @RequestParam String DOB, @RequestParam String Category, @RequestParam String Major, @RequestParam String Minor, @RequestParam int AdvisorID, Model model) {
-        String sql = "insert into Student values (?,?,?,?,?,?,?,?,?,?,?)";
-				java.sql.Date sqlDate = new java.sql.Date(new java.util.Date().getTime());
-        jdbcTemplate.update(sql, StudentID, Name, Address, Phone, Email, Gender,sqlDate, Category, Major, Minor, AdvisorID);
+    public String postStudent(@RequestParam int StudentID, @RequestParam String FirstName, @RequestParam String LastName, @RequestParam String Address, @RequestParam String Phone, @RequestParam String Email, @RequestParam String Gender, @RequestParam String DOB, @RequestParam String Category, @RequestParam String Major, @RequestParam String Minor, @RequestParam int AdvisorID, Model model) {
+        String sql = "insert into Student values (?,?,?,?,?,?,?,?,?,?,?,?)";
+				String date = new java.sql.Date(new java.util.Date().getTime()).toString();
+        jdbcTemplate.update(sql, StudentID, FirstName, LastName, Address, Phone, Email, Gender, string, Category, Major, Minor, AdvisorID);
         return "addPerson";
     }
 		
@@ -46,7 +46,7 @@ public class MainController {
     public String postStaff(@RequestParam int StaffID, @RequestParam String Name, @RequestParam String Email, @RequestParam String Address, @RequestParam String DOB, @RequestParam String Gender, @RequestParam String Title, @RequestParam String Location, Model model) {
         String sql = "insert into Staff values (?,?,?,?,?,?,?,?)";
 				java.sql.Date sqlDate = new java.sql.Date(new java.util.Date().getTime());
-        jdbcTemplate.update(sql,StaffID, Name, Email, Address, sqlDate, Gender, Title, Location);
+        jdbcTemplate.update(sql,StaffID, FirstName, LastName, Email, Address, sqlDate, Gender, Title, Location);
         return "addPerson";
     }
 
@@ -64,13 +64,6 @@ public class MainController {
     public String deleteStudent(){
         return "deleteStudent";        
     }
-		
-		@GetMapping("/hallInfo")
-		public String info() {
-				String sql = "select name from andrewcamps.residence_hall where name='Coronado'";
-				System.out.println(jdbcTemplate.query(sql, new HallRowMapper()));
-				return "hallInfo";
-		}
 
 }
 
