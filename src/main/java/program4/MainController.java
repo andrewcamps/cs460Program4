@@ -36,18 +36,18 @@ public class MainController {
     }
 
    	@GetMapping("/addPerson/postStudent")
-    public String postStudent(@RequestParam int StudentID, @RequestParam String StuName, @RequestParam String Address, @RequestParam String Phone, @RequestParam String Email, @RequestParam String Gender, @RequestParam String DOB, @RequestParam String Category, @RequestParam String Major, @RequestParam String Minor, @RequestParam int AdvisorID, Model model) {
-        String sql = "insert into Student values (?,?,?,?,?,?,?,?,?,?,?)";
-				java.sql.Date sqlDate = new java.sql.Date(new java.util.Date().getTime());
-        jdbcTemplate.update(sql, StudentID, StuName, Address, Phone, Email, Gender,DOB, Category, Major, Minor, AdvisorID);
+    public String postStudent(@RequestParam int StudentID, @RequestParam String StuName, @RequestParam String Address, @RequestParam String Phone, @RequestParam String Email, @RequestParam String Gender, @RequestParam String DOB, @RequestParam String Category, @RequestParam String ClassYear, @RequestParam String Major, @RequestParam String Minor, @RequestParam int AdvisorID, Model model) {
+        String sql = "insert into Student values (?,?,?,?,?,?,?,?,?,?,?,?)";
+        
+		jdbcTemplate.update(sql, StudentID, StuName, Address, Phone, Email, Gender, DOB, Category, ClassYear, Major, Minor, AdvisorID);
         return "addPerson";
     }
 		
 		@GetMapping("/addPerson/postStaff")
     public String postStaff(@RequestParam int StaffID, @RequestParam String StaffName, @RequestParam String Email, @RequestParam String Address, @RequestParam String DOB, @RequestParam String Gender, @RequestParam String Title, @RequestParam String Location, Model model) {
         String sql = "insert into Staff values (?,?,?,?,?,?,?,?)";
-				java.sql.Date sqlDate = new java.sql.Date(new java.util.Date().getTime());
-        jdbcTemplate.update(sql,StaffID, StaffName, Email, Address, sqlDate, Gender, Title, Location);
+
+        jdbcTemplate.update(sql,StaffID, StaffName, Email, Address, DOB, Gender, Title, Location);
         return "addPerson";
     }
 @GetMapping("/addLease/postLease")

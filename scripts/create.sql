@@ -68,7 +68,7 @@ CREATE TABLE student (
 	Gender varchar2(1) NOT NULL CHECK (Gender IN ('M', 'F')),
 	DOB varchar2(20) NOT NULL,
 	Category varchar2(14) NOT NULL CHECK (Category IN ('undergraduate', 'postgraduate')),
-	ClassYear varchar2(15) CHECK (ClassYear IN ('first-year', 'second-year', 'third-year', 'fourth-year')),
+	ClassYear varchar2(15) NOT NULL CHECK (ClassYear IN ('first-year', 'second-year', 'third-year', 'fourth-year')),
 	Major varchar2(50),
 	Minor varchar2(50),
 	AdvisorID int NOT NULL,
