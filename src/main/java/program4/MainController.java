@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
@@ -64,7 +65,42 @@ public class MainController {
     public String deleteStudent(){
         return "deleteStudent";        
     }
-
+		
+		@GetMapping("/hallInfo")
+		public String Info(){
+			List<String> info = getHallInfo();
+			
+			for(String temp : info) {
+				System.out.println(temp);
+			}
+			
+			return "hallInfo";
+		}
+		
+		/* */
+		public List<String> getHallInfo() {
+			String sql = "select name, firstname, lastname, phone from residence_hall join staff using (staffid)";
+			
+			List hallList = jdbcTemplate.query(sql, new ResultSetExtractor<List<String>>() {
+				@Override
+				public List<String> extractData(ResultSet rs) throws SQLException, DataAccessException {
+				    List<String> list = new ArrayList<String>();
+				    while (rs.next()){
+				        String info = "";
+								info += rs.getString(1);
+								info += rs.getString(2);
+								info += rs.getString(3);
+								info += rs.getString(4);
+				        list.add(info);
+				    }
+				    return list;
+				}
+      });
+			
+      return hallList;
+		}
 }
+
+
 
 
