@@ -96,10 +96,6 @@ public class MainController {
 				}
       });
 			
-			for(String temp : hallList) {
-				System.out.println(temp);
-			}
-			
 			System.out.println("Done");
 			
       return hallList;
