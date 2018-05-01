@@ -69,19 +69,14 @@ public class MainController {
 		
 		@GetMapping("/hallInfo")
 		public String Info(){
-			System.out.println("HERE");
 			List<String> info = getHallInfo();
-			
-			for(String temp : info) {
-				System.out.println(temp);
-			}
 			
 			return "hallInfo";
 		}
 		
 		/* */
 		public List<String> getHallInfo() {
-			String sql = "select name, firstname, lastname, phone from residence_hall join staff using (staffid)";
+			String sql = "select name, firstname, lastname, phone from andrewcamps.residence_hall join andrewcamps.staff using (staffid)";
 			
 			List hallList = jdbcTemplate.query(sql, new ResultSetExtractor<List<String>>() {
 				@Override
@@ -100,6 +95,12 @@ public class MainController {
 				    return list;
 				}
       });
+			
+			for(String temp : hallList) {
+				System.out.println(temp);
+			}
+			
+			System.out.println("Done");
 			
       return hallList;
 		}
