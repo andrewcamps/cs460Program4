@@ -64,6 +64,14 @@ public class MainController {
     public String deleteStudent(){
         return "deleteStudent";        
     }
+		
+		@GetMapping("/hallInfo")
+		public String info() {
+				String sql = "select name from andrewcamps.residence_hall";
+				console.log("Test");
+				//jdbcTemplate.query(sql, name);
+				return "hallInfo";
+		}
 
 }
 
