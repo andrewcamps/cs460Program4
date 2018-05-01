@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper; 
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
 
@@ -69,37 +69,49 @@ public class MainController {
 		
 		@GetMapping("/hallInfo")
 		public String Info(){
-			List<String> info = getHallInfo();
+			String sql = "select name from residence_hall";
+			
+			List<String> info = jdbcTemplate.query(sql, new RowMapper<String>() {
+          public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+              String info = rs.getString("name");
+              return info;
+          }
+      });
+			
+			
+			
+			
+			//List<String> info = getHallInfo();
 			
 			System.out.println(info.size());
 			
 			return "hallInfo";
 		}
 		
-		/* */
-		public List<String> getHallInfo() {
-			String sql = "select name from residence_hall";
-			
-			List hallList = jdbcTemplate.query(sql, new ResultSetExtractor<List<String>>() {
-				@Override
-				public List<String> extractData(ResultSet rs) throws SQLException, DataAccessException {
-				    List<String> list = new ArrayList<String>();
-				    while (rs.next()){
-				        String info = "";
-								info += rs.getString("NAME");
-								info += rs.getString("FIRSTNAME");
-								info += rs.getString("LASTNAME");
-								info += rs.getString("PHONE");
-								
-								System.out.println(info);
-				        list.add(info);
-				    }
-				    return list;
-				}
-      });
-			
-      return hallList;
-		}
+		// /* */
+		// public List<String> getHallInfo() {
+		// 	String sql = "select name from residence_hall";
+		// 
+		// 	List hallList = jdbcTemplate.query(sql, new ResultSetExtractor<List<String>>() {
+		// 		@Override
+		// 		public List<String> extractData(ResultSet rs) throws SQLException, DataAccessException {
+		// 		    List<String> list = new ArrayList<String>();
+		// 		    while (rs.next()){
+		// 		        String info = "";
+		// 						info += rs.getString("NAME");
+		// 						info += rs.getString("FIRSTNAME");
+		// 						info += rs.getString("LASTNAME");
+		// 						info += rs.getString("PHONE");
+		// 
+		// 						System.out.println(info);
+		// 		        list.add(info);
+		// 		    }
+		// 		    return list;
+		// 		}
+    //   });
+		// 
+    //   return hallList;
+		// }
 }
 
 
