@@ -32,7 +32,7 @@ public class QueryController {
 		@GetMapping("/hallInfo")
 		public String info() {
 				String sql = "select name from andrewcamps.residence_hall";
-				console.log("Test")
+				console.log("Test");
 				//jdbcTemplate.query(sql, name);
 				return "hallInfo";
 		}
