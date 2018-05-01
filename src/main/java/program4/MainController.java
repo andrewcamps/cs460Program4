@@ -71,6 +71,8 @@ public class MainController {
 		public String Info(){
 			List<String> info = getHallInfo();
 			
+			System.out.println(info.size());
+			
 			return "hallInfo";
 		}
 		
