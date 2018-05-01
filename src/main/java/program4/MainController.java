@@ -76,7 +76,7 @@ public class MainController {
 		
 		/* */
 		public List<String> getHallInfo() {
-			String sql = "select name, firstname, lastname, phone from andrewcamps.residence_hall join andrewcamps.staff using (staffid)";
+			String sql = "select name from residence_hall";
 			
 			List hallList = jdbcTemplate.query(sql, new ResultSetExtractor<List<String>>() {
 				@Override
@@ -95,8 +95,6 @@ public class MainController {
 				    return list;
 				}
       });
-			
-			System.out.println("Done");
 			
       return hallList;
 		}
