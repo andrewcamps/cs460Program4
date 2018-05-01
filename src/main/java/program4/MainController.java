@@ -66,10 +66,9 @@ public class MainController {
     }
 		
 		@GetMapping("/hallInfo")
-		public List<Hall> info() {
+		public List info() {
 				String sql = "select name from andrewcamps.residence_hall where name='Coronado'";
-				RowMapper<Hall> rowMapper = new BeanPropertyRowMapper<Hall>(Hall.class);
-				System.out.println(jdbcTemplate.query(sql, rowMapper));
+				System.out.println(jdbcTemplate.query(sql, new HallRowMapper()));
 				return "hallInfo";
 		}
 
