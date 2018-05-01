@@ -66,7 +66,7 @@ public class MainController {
     }
 		
 		@GetMapping("/hallInfo")
-		public List info() {
+		public String info() {
 				String sql = "select name from andrewcamps.residence_hall where name='Coronado'";
 				System.out.println(jdbcTemplate.query(sql, new HallRowMapper()));
 				return "hallInfo";
