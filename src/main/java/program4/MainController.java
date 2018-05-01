@@ -38,7 +38,7 @@ public class MainController {
     public String postStudent(@RequestParam int StudentID, @RequestParam String FirstName, @RequestParam String LastName, @RequestParam String Address, @RequestParam String Phone, @RequestParam String Email, @RequestParam String Gender, @RequestParam String DOB, @RequestParam String Category, @RequestParam String Major, @RequestParam String Minor, @RequestParam int AdvisorID, Model model) {
         String sql = "insert into Student values (?,?,?,?,?,?,?,?,?,?,?,?)";
 				String date = new java.sql.Date(new java.util.Date().getTime()).toString();
-        jdbcTemplate.update(sql, StudentID, FirstName, LastName, Address, Phone, Email, Gender, string, Category, Major, Minor, AdvisorID);
+        jdbcTemplate.update(sql, StudentID, FirstName, LastName, Address, Phone, Email, Gender, date, Category, Major, Minor, AdvisorID);
         return "addPerson";
     }
 		
