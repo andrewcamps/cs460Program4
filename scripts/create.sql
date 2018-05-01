@@ -1,7 +1,6 @@
 CREATE TABLE staff (
 	StaffID int NOT NULL,
-	FirstName varchar2(50) NOT NULL,
-	LastName varchar2(50) NOT NULL,
+	StaffName varchar2(100) NOT NULL,
 	Email varchar2(100),
 	Address varchar2(100) NOT NULL,
 	DOB varchar2(20) NOT NULL,
@@ -13,7 +12,7 @@ CREATE TABLE staff (
 
 CREATE TABLE residence_hall (
 	HallID varchar2(10) NOT NULL,
-	Name varchar2(100) NOT NULL,
+	HallName varchar2(100) NOT NULL,
 	Address varchar2(100) NOT NULL,
 	Phone varchar2(15) NOT NULL,
 	StaffID int,
@@ -52,8 +51,7 @@ CREATE TABLE inspection (
 
 CREATE TABLE advisor (
 	AdvisorID int NOT NULL,
-	FirstName varchar2(50) NOT NULL,
-	LastName varchar2(50) NOT NULL,
+	AdvName varchar2(100) NOT NULL,
 	Position varchar2(100) NOT NULL CHECK (Position IN ('Assistant', 'Head')),
 	Department varchar2(50) NOT NULL,
 	Phone varchar2(15),
@@ -63,8 +61,7 @@ CREATE TABLE advisor (
 
 CREATE TABLE student (
 	StudentID int NOT NULL,
-	FirstName varchar2(50) NOT NULL,
-	LastName varchar2(50) NOT NULL,
+	StuName varchar2(100) NOT NULL,
 	Address varchar2(100) NOT NULL,
 	Phone varchar2(15) NOT NULL,
 	Email varchar2(300),
@@ -82,8 +79,7 @@ CREATE TABLE student (
 CREATE TABLE lease (
 	LeaseID int NOT NULL,
 	Duration int NOT NULL CHECK (Duration=1 OR Duration=2),
-	FirstName varchar2(50) NOT NULL,
-	LastName varchar2(50) NOT NULL,
+	LName varchar2(100) NOT NULL,
 	Cost float NOT NULL,
 	StartDate varchar2(20) NOT NULL,
 	StudentID int NOT NULL,

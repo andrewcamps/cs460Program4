@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<title>Hall Info</title>
+	</head>
+	<body>
+		<table>
+			<tr>
+				<th>Residence Hall</th>
+				<th>Manager</th>
+				<th>Phone</th>
+			</tr>
+			<tr th:each="i : ${info}">
+				<td th:text="${i.hname}"></td>
+				<td th:text="${i.sname}"></td>
+				<td th:text="${i.phone}"></td>
+			</tr>
+		</table>
+	</body>
+</html>

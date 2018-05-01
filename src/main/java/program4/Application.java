@@ -35,8 +35,8 @@ public class Application implements CommandLineRunner{
         DriverManagerDataSource ds = new DriverManagerDataSource();
         ds.setDriverClassName(oracle.jdbc.driver.OracleDriver.class.getName());
         ds.setUrl("jdbc:oracle:thin:@aloe.cs.arizona.edu:1521:oracle");
-        ds.setUsername("andrewcamps");
-        ds.setPassword("a7019");
+        ds.setUsername("gseale");
+        ds.setPassword("a0157");
         return ds;
     }
     public static void main(String[] args) {
