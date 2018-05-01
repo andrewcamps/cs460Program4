@@ -35,11 +35,10 @@ public class MainController {
     }
 
    	@GetMapping("/addPerson/postStudent")
-    public String postStudent(@RequestParam int StudentID, @RequestParam String FirstName, @RequestParam String LastName, @RequestParam String Address, @RequestParam String Phone, @RequestParam String Email, @RequestParam String Gender, @RequestParam String Day, @RequestParam String Month, @RequestParam String Year, @RequestParam String Category, @RequestParam String ClassYear, @RequestParam String Major, @RequestParam String Minor, @RequestParam int AdvisorID, Model model) {
+    public String postStudent(@RequestParam int StudentID, @RequestParam String FirstName, @RequestParam String LastName, @RequestParam String Address, @RequestParam String Phone, @RequestParam String Email, @RequestParam String Gender, @RequestParam String DOB, @RequestParam String Category, @RequestParam String ClassYear, @RequestParam String Major, @RequestParam String Minor, @RequestParam int AdvisorID, Model model) {
         String sql = "insert into Student values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
-				String date = Day + "-" + Month + "-" + Year;
-				System.out.println(date);
-        jdbcTemplate.update(sql, StudentID, FirstName, LastName, Address, Phone, Email, Gender, date, Category, ClassYear, Major, Minor, AdvisorID);
+				java.sql.Date sqlDate = new java.sql.Date(new java.util.Date().getTime());
+        jdbcTemplate.update(sql, StudentID, FirstName, LastName, Address, Phone, Email, Gender, sqldate, Category, ClassYear, Major, Minor, AdvisorID);
         return "addPerson";
     }
 		
