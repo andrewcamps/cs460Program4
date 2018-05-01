@@ -67,9 +67,9 @@ public class MainController {
 		
 		@GetMapping("/hallInfo")
 		public String info() {
-				//String sql = "select name from andrewcamps.residence_hall";
-				System.out.println("Test");
-				//jdbcTemplate.query(sql, name);
+				String sql = "select name from andrewcamps.residence_hall where name='Coronado'";
+				//System.out.println("Test");
+				System.out.println(jdbcTemplate.query(sql));
 				return "hallInfo";
 		}
 
