@@ -21,7 +21,7 @@ import java.sql.*;
 @Controller
 public class MainController {
 
-		@Autowired
+	@Autowired
     private DataSource dataSource;
     private JdbcTemplate jdbcTemplate;
 
@@ -30,7 +30,7 @@ public class MainController {
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-		@GetMapping("/addPerson")
+	@GetMapping("/addPerson")
     public String addPerson(){
         return "addPerson";        
     }
@@ -43,32 +43,32 @@ public class MainController {
         return "addPerson";
     }
 		
-		@GetMapping("/addPerson/postStaff")
+	@GetMapping("/addPerson/postStaff")
     public String postStaff(@RequestParam int StaffID, @RequestParam String StaffName, @RequestParam String Email, @RequestParam String Address, @RequestParam String DOB, @RequestParam String Gender, @RequestParam String Title, @RequestParam String Location, Model model) {
         String sql = "insert into Staff values (?,?,?,?,?,?,?,?)";
 
         jdbcTemplate.update(sql,StaffID, StaffName, Email, Address, DOB, Gender, Title, Location);
         return "addPerson";
     }
-@GetMapping("/addLease/postLease")
+
+	@GetMapping("/addLease/postLease")
     public String postLease(@RequestParam int LeaseID, @RequestParam int Duration, @RequestParam String LName, @RequestParam float Cost, @RequestParam String StartDate, @RequestParam int StudentID, @RequestParam int RoomID, Model model) {
         String sql = "insert into Lease values (?,?,?,?,?,?,?)";
         jdbcTemplate.update(sql,LeaseID, Duration, LName, Cost,StartDate,StudentID,RoomID);
         return "addLease";
     }
 
-
-		@GetMapping("/addLease")
+	@GetMapping("/addLease")
     public String addLease(){
         return "addLease";        
     }
 		
-		@GetMapping("/updateRent")
+	@GetMapping("/updateRent")
     public String updateRent(){
         return "updateRent";        
     }
 		
-		@GetMapping("/deleteStudent")
+	@GetMapping("/deleteStudent")
     public String deleteStudent(){
         return "deleteStudent";        
     }
@@ -86,4 +86,32 @@ public class MainController {
 		model.addAttribute("info", info);
 		return "hallInfo";	
 	}
+
+	@GetMapping("/unpaidInvoices")
+	public String getUnpaidInvoices(Model model) {
+		String sql1 = "select lname, paymentdue, roomnum, hallname from (select leaseid, paymentdue, datepaid from invoice minus select";
+		sql1 += " leaseid, paymentdue, datepaid from invoice where datepaid < to_date('01-01-5000', 'DD-MM-YYYY')) join lease using (leaseid)";
+		sql1 += " join room using (roomid) join residence_hall using (hallid) union select lname, paymentdue, roomnum, NULL from (select";
+		sql1 += " leaseid, paymentdue, datepaid from invoice minus select leaseid, paymentdue, datepaid from invoice where datepaid";
+		sql1 += " < to_date('01-01-5000', 'DD-MM-YYYY')) join lease using (leaseid) join room using (roomid) join apartment using (apartmentid)";
+
+		String sql2 = "select sum(paymentdue) from (select leaseid, paymentdue, datepaid from invoice minus select leaseid, paymentdue, datepaid from invoice where datepaid < to_date('01-01-5000', 'DD-MM-YYYY')) join lease using (leaseid) join room using (roomid)";
+
+	//	List<UnpaidInfo> payInfo = jdbcTemplate.query(sql1, new RowMapper<UnpaidInfo>() {
+	//		public UnpaidInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+	//			return new UnpaidInfo(rs.getString("lname"), rs.getInt("paymentdue"), rs.getInt("roomnum"), rs.getString("hallname"));
+	//		}
+	//	});
+
+//		String sum = (String) jdbcTemplate.query(sql2, String.class);
+
+//		System.out.println(payInfo.size());
+		System.out.println(sum);
+
+	//	model.addArribute("info", info);
+	//	model.addArribute("sum", sum);
+		return "unpaidInfo";
+	}	
+
+
 }

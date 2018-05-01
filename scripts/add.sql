@@ -14,7 +14,7 @@ insert into staff values (5, 'Aleena Zhang', 'aleenazhang@reslife.arizona.edu', 
 insert into staff values (6, 'Timothy Waller', 'timothywaller@reslife.arizona.edu', '141 Washington Ave Extension, Albany NY 12205', '03-JAN-1982', 'M', 'Cleaner', 'Residence Hall');
 	
 insert into student values (1, 'Andrew Camps', '777 Brockton Avenue, Abington MA 2351', '520-378-2211', 'andrewcamps@email.arizona.edu', 'M', '29-JUN-2001', 'undergraduate', 'first-year', 'Computer Science', 'Math', 1);	
-insert into student values (2, 'Waylon Dalton', '30 Memorial Drive, Avon MA 2322', '520-378-2212', 'waylondalton@email.arizona.edu', 'M', '01-MAY-2002', 'undergraduate', 'second-year', 'Accounting', NULL, 4);
+insert into student values (2, 'Waylon Dalton', '30 Memorial Drive, Avon MA 2322', '520-378-2212', 'waylondalton@email.arizona.edu', 'M', '01-MAY-2002', 'undergraduate', 'second-year', 'Accounting', 'first-year', 4);
 insert into student values (3, 'Marcus Cruz', '250 Hartford Avenue, Bellingham MA 2019', '520-378-2214', 'marcuscruz@email.arizona.edu', 'M', '03-MAR-1999', 'postgraduate', NULL, 'Advertising', 'Math', 4);
 insert into student values (4, 'Eddie Randolph', '700 Oak Street, Brockton MA 2301', '520-378-2213', 'eddierandolph@email.arizona.edu', 'M', '04-DEC-1998', 'undergraduate', 'first-year', 'Math', 'Agriculture', 1);
 insert into student values (5, 'Hadassah Hartman', '66-4 Parkhurst Rd, Chelmsford MA 1824', '520-378-2215', 'hadassahhartman@email.arizona.edu', 'M', '05-APR-2004', 'undergraduate', 'second-year', 'Computer Science', 'Math', 1);
@@ -114,13 +114,13 @@ insert into lease values (14, 1, 'Ada Rodriguez', 650, '15-AUG-2019', 19, 30);
 	
 insert into invoice values (1, 'Fall', 500, '20-AUG-2018', 1);
 insert into invoice values (2, 'Fall', 500, '29-AUG-2018', 2);
-insert into invoice values (3, 'Spring', 500, '21-DEC-2018', 2);
+insert into invoice values (3, 'Spring', 500, NULL, 2);
 insert into invoice values (4, 'Spring', 650, '11-DEC-2018', 4);
 insert into invoice values (5, 'Spring', 650, '12-DEC-2018', 6);
-insert into invoice values (6, 'Fall', 500, '10-AUG-2018', 10);
+insert into invoice values (6, 'Fall', 500, NULL, 10);
 insert into invoice values (7, 'Fall', 500, '15-AUG-2019', 13);
 insert into invoice values (8, 'Spring', 500, '15-DEC-2018', 10);
-insert into invoice values (9, 'Spring', 650, '05-DEC-2018', 14);
+insert into invoice values (9, 'Spring', 650, NULL, 14);
 insert into invoice values (10, 'Fall', 500, '11-AUG-2019', 11);
 																															
 insert into inspection values (1, '15-JUL-2018', 'Y', NULL, 1, 5);
