@@ -121,9 +121,28 @@ public class MainController {
 		return "hallInfo";	
 	}
 
+//TODO: GET CUR Date
 	@GetMapping("/vacantRooms")
 	public String getVacantRooms(Model model) {
-		
+		String sql = "select roomid, roomnum, hallname, rent from (select roomid from room minus select roomid from lease where startdate <= '02-MAY-2018' and enddate >= '02-MAY-2018' group by roomid) join room using (roomid) join residence_hall using (hallid)";
+
+		List<RoomDTO> rm = jdbcTemplate.query(sql, new RowMapper<RoomDTO>() {
+            public RoomDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+				int id = rs.getInt("roomid");
+                int rnum = rs.getInt("roomnum");
+                String loc = rs.getString("hallname");
+				float rent = rs.getFloat("rent");
+
+				RoomDTO room = new RoomDTO(id, rnum, rent);
+				room.setLocation(loc);
+
+                return room;
+            }
+        });		
+
+		model.addAttribute("vacant", rm);
+		model.addAttribute("count", 0);
+
 		return "vacantRoom";
 	}
 

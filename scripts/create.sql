@@ -81,9 +81,11 @@ CREATE TABLE lease (
 	Duration int NOT NULL CHECK (Duration=1 OR Duration=2),
 	LName varchar2(100) NOT NULL,
 	Cost float NOT NULL,
-	StartDate varchar2(20) NOT NULL,
+	StartDate date NOT NULL,
+	EndDate date NOT NULL,
 	StudentID int NOT NULL,
 	RoomID int NOT NULL,
+	CONSTRAINT CheckEndLaterThanStart CHECK (EndDate >= StartDate),
 	PRIMARY KEY (LeaseID),
 	FOREIGN KEY (StudentID) REFERENCES student (StudentID),
 	FOREIGN KEY (RoomID) REFERENCES room (RoomID)

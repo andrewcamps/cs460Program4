@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+        <title>Vacant Rooms</title>
+    </head>
+    <body>
+        <h1>Vacant Rooms</h1>
+        <table>
+            <tr>
+				<th>Room ID</th>
+                <th>Room Number</th>
+                <th>Location</th>
+                <th>Rent</th>
+            </tr>
+            <tr th:each="v : ${vacant}">
+				<td th:text="${v.RoomID}">
+                <td th:text="${v.RoomNumber}"></td>
+                <td th:text="${v.Loc}"></td>
+                <td th:text="${v.Rent}"></td>
+            </tr>
+            <tr>
+                <td><strong>Total Rooms: </strong></td>
+                <td th:text="${count}"></td>
+            </tr>
+        </table>
+    </body>
+</html>
+
