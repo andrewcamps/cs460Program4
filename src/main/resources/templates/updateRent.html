@@ -1,7 +1,44 @@
 <DOCTYPE! html>
 	<head>
-		<title> Delete Student </title>
+		<title> Update Rent </title>
+		
+		<script
+  		src="https://code.jquery.com/jquery-3.3.1.js"
+  		integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  		crossorigin="anonymous">
+		</script>
+			
+		<script type="text/javascript">
+			$( document ).ready(function() {
+
+				
+				
+			})
+			var updateRent = function(id){
+					
+					$.get( "/updateRent/update?Rent=" + document.getElementById(''+id).value + "&RoomID=" + id, function() {
+							alert( "Rent Updated!" );
+							window.location.href = "/updateRent" ;
+					})
+				}
+		</script>
+		
 	</head>
 	<body>
+		<table>
+			<tr>
+				<th>Room ID</th>
+				<th>Room Number</th>
+				<th>Current Rent</th>
+				<th>New Rent</th>
+			</tr>
+			<tr th:each="r : ${rooms}">
+				<td th:text="${r.RoomID}"></td>
+				<td th:text="${r.RoomNumber}"></td>
+				<td th:text="${r.Rent}"></td>
+				<td><input type="text" th:id="''+ ${r.RoomID}"></td>
+				<td><button th:onclick="${'updateRent(' + r.RoomID + ');'}">SAVE</button></td>
+			</tr>
+		</table>
 	</body>
 </html>

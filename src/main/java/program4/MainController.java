@@ -64,8 +64,21 @@ public class MainController {
     }
 		
 	@GetMapping("/updateRent")
-    public String updateRent(){
-        return "updateRent";        
+    public String updateRent(Model model){
+       		 String sql = "select RoomID, RoomNum, Rent from room";
+		List<RoomDTO> rooms = jdbcTemplate.query(sql, new RowMapper<RoomDTO>() {
+			public RoomDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+				return new RoomDTO(rs.getInt("RoomID"), rs.getInt("RoomNum"), rs.getInt("Rent"));
+			}
+		});
+		model.addAttribute("rooms", rooms);
+       		return "updateRent";               
+    }
+	@GetMapping("/updateRent/update")
+    public String updateRoomRent(@RequestParam float Rent, @RequestParam int RoomID, Model model){
+       		 String sql = "UPDATE room SET Rent = " + Rent + " WHERE RoomID = " + RoomID;
+		 jdbcTemplate.execute(sql);
+       		return "updateRent";               
     }
 		
 	@GetMapping("/deleteStudent")
