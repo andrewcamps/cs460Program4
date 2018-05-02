@@ -31,7 +31,7 @@ CREATE TABLE room (
 	RoomNum int NOT NULL,
 	Rent float NOT NULL,
 	HallID varchar2(10),
-	ApartmentID varchar2(10),
+	ApartmentID varchar2(20),
 	PRIMARY KEY (RoomID),
 	FOREIGN KEY (HallID) REFERENCES residence_hall (HallID),
 	FOREIGN KEY (ApartmentID) REFERENCES apartment (ApartmentID)

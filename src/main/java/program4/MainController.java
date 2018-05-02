@@ -124,7 +124,11 @@ public class MainController {
 //TODO: GET CUR Date
 	@GetMapping("/vacantRooms")
 	public String getVacantRooms(Model model) {
-		String sql = "select roomid, roomnum, hallname, rent from (select roomid from room minus select roomid from lease where startdate <= '02-MAY-2018' and enddate >= '02-MAY-2018' group by roomid) join room using (roomid) join residence_hall using (hallid)";
+		java.sql.Date sqlDate = new java.sql.Date(new java.util.Date().getTime());
+
+		String sql = "select roomid, roomnum, hallname, rent from (select roomid from room minus select roomid from lease where startdate <= TO_DATE('" + sqlDate + "', 'yyyy-mm-dd') and enddate >= TO_DATE('" + sqlDate + "', 'yyyy-mm-dd') group by roomid) join room using (roomid) join residence_hall using (hallid)";
+		String sql2 = "select roomid, roomnum, apartmentid, rent from (select roomid from room minus select roomid from lease where startdate <= TO_DATE('" + sqlDate + "', 'yyyy-mm-dd') and enddate >= TO_DATE('" + sqlDate + "', 'yyyy-mm-dd') group by roomid) join room using (roomid) join apartment using (apartmentid)";		
+		String sql3 = "select count(roomid) from (select roomid from room minus select roomid from lease where startdate <= TO_DATE('" + sqlDate + "', 'yyyy-mm-dd') and enddate >= TO_DATE('" + sqlDate + "', 'yyyy-mm-dd'))";
 
 		List<RoomDTO> rm = jdbcTemplate.query(sql, new RowMapper<RoomDTO>() {
             public RoomDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -138,20 +142,41 @@ public class MainController {
 
                 return room;
             }
+        });
+
+		List<RoomDTO> apt = jdbcTemplate.query(sql2, new RowMapper<RoomDTO>() {
+            public RoomDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+                int id = rs.getInt("roomid");
+                int rnum = rs.getInt("roomnum");
+                String loc = "Apartment " + rs.getString("apartmentid");
+                float rent = rs.getFloat("rent");
+
+                RoomDTO room = new RoomDTO(id, rnum, rent);
+                room.setLocation(loc);
+
+                return room;
+            }
         });		
 
+		int count = jdbcTemplate.queryForObject(sql3, Integer.class);
+
+		for(RoomDTO temp : apt) {
+			rm.add(temp);
+		}
+
 		model.addAttribute("vacant", rm);
-		model.addAttribute("count", 0);
+		model.addAttribute("count", count);
 
 		return "vacantRoom";
 	}
 
 	@GetMapping("/unpaidInvoices")
 	public String unpaidInfo(Model model) {
-		String sql = "select lname, paymentdue, roomnum, hallname from invoice join lease using (leaseid) join room using (roomid) join residence_hall using (hallid) where datepaid is NULL union select lname, paymentdue, roomnum, NULL from invoice join lease using (leaseid) join room using (roomid) join apartment using (apartmentid) where datepaid is NULL";
-		String sql2 = "select sum(paymentdue) from invoice where datepaid is NULL";		
+		String sql = "select lname, paymentdue, roomnum, hallname from invoice join lease using (leaseid) join room using (roomid) join residence_hall using (hallid) where datepaid is NULL";
+		String sql2 = "select lname, paymentdue, roomnum, apartmentid from invoice join lease using (leaseid) join room using (roomid) join apartment using (apartmentid) where datepaid is NULL";
+		String sql3 = "select sum(paymentdue) from invoice where datepaid is NULL";		
 
-		int sum = jdbcTemplate.queryForObject(sql2, Integer.class);
+		int sum = jdbcTemplate.queryForObject(sql3, Integer.class);
 
 		List<UnpaidInfo> info = jdbcTemplate.query(sql, new RowMapper<UnpaidInfo>() {
 			public UnpaidInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -163,6 +188,21 @@ public class MainController {
 				return new UnpaidInfo(lname, paydue, rnum, hname);
 			}
 		});
+
+		List<UnpaidInfo> apt = jdbcTemplate.query(sql2, new RowMapper<UnpaidInfo>() {
+            public UnpaidInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+                String lname = rs.getString("lname");
+                int paydue = rs.getInt("paymentdue");
+                int rnum = rs.getInt("roomnum");
+                String hname = "Apartment " + rs.getString("apartmentid");
+
+                return new UnpaidInfo(lname, paydue, rnum, hname);
+            }
+        });
+
+		for(UnpaidInfo temp : apt) {
+			info.add(temp);
+		}
 	
 		model.addAttribute("sum", sum);
 		model.addAttribute("unpaidInfo", info);
