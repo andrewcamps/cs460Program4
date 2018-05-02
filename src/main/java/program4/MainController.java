@@ -69,9 +69,30 @@ public class MainController {
     }
 		
 	@GetMapping("/deleteStudent")
-    public String deleteStudent(){
-        return "deleteStudent";        
-    }
+    	public String deleteStudent(Model model){
+
+		String sql = "select StudentID, StuName from student";
+
+		List<StudentDTO> info = jdbcTemplate.query(sql, new RowMapper<StudentDTO>() {
+			public StudentDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+				return new StudentDTO(rs.getInt("StudentID"), rs.getString("StuName"));
+			}
+		});
+
+		model.addAttribute("info", info);
+       		 return "deleteStudent";        
+    	}
+
+	@GetMapping("/deleteStudent/delete")
+    	public String postLease(@RequestParam int StudentID, Model model) {
+        	String sql1 = "DELETE FROM Student where StudentID = " + StudentID;
+		String sql2 = "DELETE FROM Lease where StudentID = " + StudentID;
+		String sql3 = "DELETE FROM Invoice where LeaseID in (select LeaseID from Lease where StudentID = " + StudentID + " )";
+		jdbcTemplate.execute(sql3);
+        	jdbcTemplate.execute(sql2);
+		jdbcTemplate.execute(sql1);
+       		 return "deleteStudent";
+   	 }
 
 	@GetMapping("/hallInfo")
 	public String getHallInfo(Model model) {
@@ -86,32 +107,17 @@ public class MainController {
 		model.addAttribute("info", info);
 		return "hallInfo";	
 	}
-
-	@GetMapping("/unpaidInvoices")
-	public String getUnpaidInvoices(Model model) {
-		String sql1 = "select lname, paymentdue, roomnum, hallname from (select leaseid, paymentdue, datepaid from invoice minus select";
-		sql1 += " leaseid, paymentdue, datepaid from invoice where datepaid < to_date('01-01-5000', 'DD-MM-YYYY')) join lease using (leaseid)";
-		sql1 += " join room using (roomid) join residence_hall using (hallid) union select lname, paymentdue, roomnum, NULL from (select";
-		sql1 += " leaseid, paymentdue, datepaid from invoice minus select leaseid, paymentdue, datepaid from invoice where datepaid";
-		sql1 += " < to_date('01-01-5000', 'DD-MM-YYYY')) join lease using (leaseid) join room using (roomid) join apartment using (apartmentid)";
-
-		String sql2 = "select sum(paymentdue) from (select leaseid, paymentdue, datepaid from invoice minus select leaseid, paymentdue, datepaid from invoice where datepaid < to_date('01-01-5000', 'DD-MM-YYYY')) join lease using (leaseid) join room using (roomid)";
-
-	//	List<UnpaidInfo> payInfo = jdbcTemplate.query(sql1, new RowMapper<UnpaidInfo>() {
-	//		public UnpaidInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
-	//			return new UnpaidInfo(rs.getString("lname"), rs.getInt("paymentdue"), rs.getInt("roomnum"), rs.getString("hallname"));
-	//		}
-	//	});
-
-//		String sum = (String) jdbcTemplate.query(sql2, String.class);
-
-//		System.out.println(payInfo.size());
-		System.out.println(sum);
-
-	//	model.addArribute("info", info);
-	//	model.addArribute("sum", sum);
-		return "unpaidInfo";
-	}	
+		@GetMapping("/leaseInfo")
+	public String getLeaseInfo(Model model) {
+		int fyhall = jdbcTemplate.queryForObject("select count(*) from lease l, student s, room r where s.StudentID = l.StudentID and l.RoomID = r.RoomID and r.HallID IS NOT NULL and s.ClassYear = 'first-year'",Integer.class);
+		int fyapt = jdbcTemplate.queryForObject("select count(*) from student s, lease l, room r where s.StudentID = l.StudentID and l.RoomID = r.RoomID and r.ApartmentID IS NOT NULL and s.ClassYear = 'first-year'",Integer.class);
+		int underhall = jdbcTemplate.queryForObject("select count(*) from student s, lease l, room r where s.StudentID = l.StudentID and l.RoomID = r.RoomID and r.HallID IS NOT NULL and s.Category = 'undergraduate'",Integer.class);
+		int underapt = jdbcTemplate.queryForObject("select count(*) from student s, lease l, room r where s.StudentID = l.StudentID and l.RoomID = r.RoomID and r.ApartmentID IS NOT NULL and s.Category = 'undergraduate'",Integer.class);
+		int gradhall = jdbcTemplate.queryForObject("select count(*) from student s, lease l, room r where s.StudentID = l.StudentID and l.RoomID = r.RoomID and r.HallID IS NOT NULL and s.Category = 'postgraduate'",Integer.class);
+		int gradapt = jdbcTemplate.queryForObject("select count(*) from student s, lease l, room r where s.StudentID = l.StudentID and l.RoomID = r.RoomID and r.ApartmentID IS NOT NULL and s.Category = 'postgraduate'",Integer.class);
+		model.addAttribute("leaseInfo", new LeaseInfo(fyhall,fyapt,underhall,underapt,gradhall,gradapt));
+		return "leaseInfo";	
+	}
 
 
 }

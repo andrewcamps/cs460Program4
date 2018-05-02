@@ -11,22 +11,30 @@
 		<script type="text/javascript">
 			$( document ).ready(function() {
 
-				$( "#deleteStudent" ).on( "submit", function( event ) {
-					event.preventDefault();
-				});
+				
 				
 			})
+			var deleteStudent = function(id){
+					
+					$.get( "/deleteStudent/delete?StudentID=" + id, function() {
+							alert( "Student Deleted!" );
+							window.location.href = "/deleteStudent" ;
+					})
+				}
 		</script>
 		
 	</head>
 	<body>
-		<form name="deleteStudent" id="deleteStudent">
-			<h1>Delete Student</h1><hr>
-			<label>Student ID</label>
-			<input name="StudentID"><hr>
-			<label>Name</label>
-			<input name="Name"><hr>
-			<button type="submit">Submit!</button>
-		</form>
+		<table>
+			<tr>
+				<th>StudentID</th>
+				<th>Student Name</th>
+			</tr>
+			<tr th:each="i : ${info}">
+				<td th:text="${i.StudentID}"></td>
+				<td th:text="${i.StuName}"></td>
+				<td><button th:onclick="${'deleteStudent(' + i.StudentID + ');'}">DELETE</button></td>
+			</tr>
+		</table>
 	</body>
 </html>
