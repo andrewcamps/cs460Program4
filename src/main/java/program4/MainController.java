@@ -120,7 +120,37 @@ public class MainController {
 		model.addAttribute("info", info);
 		return "hallInfo";	
 	}
-		@GetMapping("/leaseInfo")
+
+	@GetMapping("/vacantRooms")
+	public String getVacantRooms(Model model) {
+		
+		return "vacantRoom";
+	}
+
+	@GetMapping("/unpaidInvoices")
+	public String unpaidInfo(Model model) {
+		String sql = "select lname, paymentdue, roomnum, hallname from invoice join lease using (leaseid) join room using (roomid) join residence_hall using (hallid) where datepaid is NULL union select lname, paymentdue, roomnum, NULL from invoice join lease using (leaseid) join room using (roomid) join apartment using (apartmentid) where datepaid is NULL";
+		String sql2 = "select sum(paymentdue) from invoice where datepaid is NULL";		
+
+		int sum = jdbcTemplate.queryForObject(sql2, Integer.class);
+
+		List<UnpaidInfo> info = jdbcTemplate.query(sql, new RowMapper<UnpaidInfo>() {
+			public UnpaidInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+				String lname = rs.getString("lname");
+				int paydue = rs.getInt("paymentdue");
+				int rnum = rs.getInt("roomnum");
+				String hname = rs.getString("hallname");
+				
+				return new UnpaidInfo(lname, paydue, rnum, hname);
+			}
+		});
+	
+		model.addAttribute("sum", sum);
+		model.addAttribute("unpaidInfo", info);
+		return "unpaidInfo";
+	}
+
+	@GetMapping("/leaseInfo")
 	public String getLeaseInfo(Model model) {
 		int fyhall = jdbcTemplate.queryForObject("select count(*) from lease l, student s, room r where s.StudentID = l.StudentID and l.RoomID = r.RoomID and r.HallID IS NOT NULL and s.ClassYear = 'first-year'",Integer.class);
 		int fyapt = jdbcTemplate.queryForObject("select count(*) from student s, lease l, room r where s.StudentID = l.StudentID and l.RoomID = r.RoomID and r.ApartmentID IS NOT NULL and s.ClassYear = 'first-year'",Integer.class);
@@ -128,6 +158,7 @@ public class MainController {
 		int underapt = jdbcTemplate.queryForObject("select count(*) from student s, lease l, room r where s.StudentID = l.StudentID and l.RoomID = r.RoomID and r.ApartmentID IS NOT NULL and s.Category = 'undergraduate'",Integer.class);
 		int gradhall = jdbcTemplate.queryForObject("select count(*) from student s, lease l, room r where s.StudentID = l.StudentID and l.RoomID = r.RoomID and r.HallID IS NOT NULL and s.Category = 'postgraduate'",Integer.class);
 		int gradapt = jdbcTemplate.queryForObject("select count(*) from student s, lease l, room r where s.StudentID = l.StudentID and l.RoomID = r.RoomID and r.ApartmentID IS NOT NULL and s.Category = 'postgraduate'",Integer.class);
+		
 		model.addAttribute("leaseInfo", new LeaseInfo(fyhall,fyapt,underhall,underapt,gradhall,gradapt));
 		return "leaseInfo";	
 	}
