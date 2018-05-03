@@ -10,7 +10,7 @@ public class StudentDTO {
 	public int StudentID;
 	public String StuName;
 
-	 StudentDTO(int StudentID, String StuName) {
+	 public StudentDTO(int StudentID, String StuName) {
 		this.StudentID = StudentID;
 		this.StuName = StuName;
 	}

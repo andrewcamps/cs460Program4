@@ -15,6 +15,7 @@ import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.sql.*;
 
@@ -49,7 +50,7 @@ public class MainController {
                 return new AdvisorDTO(id, info);
             }
         });
-
+		
 		model.addAttribute("advisor", adv);
         return "addStudent";        
     }
@@ -61,8 +62,53 @@ public class MainController {
 	
     //Navigate to page that allows the addition of leases to the DB
     @GetMapping("/addLease")
-    public String addLease(){
-        return "addLease";        
+    public String addLease(Model model){
+		String sql = "select stuname, studentid from student";
+		String sql2 = "select roomid, roomnum, rent, hallname from room join residence_hall using (hallid)";
+        String sql3 = "select roomid, roomnum, rent, apartmentid from room join apartment using (apartmentid)";
+
+        List<StudentDTO> stu = jdbcTemplate.query(sql, new RowMapper<StudentDTO>() {
+            public StudentDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+                int id = rs.getInt("studentid");
+                String info = rs.getString("stuname") + " - " + id;
+
+                return new StudentDTO(id, info);
+            }
+        });
+
+		List<RoomDTO> rh = jdbcTemplate.query(sql2, new RowMapper<RoomDTO>() {
+            public RoomDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+                int id = rs.getInt("roomid");
+				int rnum = rs.getInt("roomnum");
+				float rent = rs.getFloat("rent");
+                String info = rs.getString("hallname") + " - " + rnum;
+				RoomDTO rm = new RoomDTO(id, rnum, rent);
+				
+				rm.setLocation(info);
+                return rm;
+            }
+        });
+
+        List<RoomDTO> apt = jdbcTemplate.query(sql3, new RowMapper<RoomDTO>() {
+            public RoomDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+                int id = rs.getInt("roomid");
+                int rnum = rs.getInt("roomnum");
+                float rent = rs.getFloat("rent");
+                String info = rs.getString("apartmentid") + " - " + "Room " + rnum;
+				RoomDTO rm = new RoomDTO(id, rnum, rent);				
+
+				rm.setLocation(info);
+                return rm;
+            }
+        });
+
+		for(RoomDTO rm : apt) {
+			rh.add(rm);
+		}
+
+        model.addAttribute("student", stu);
+        model.addAttribute("room", rh);
+		return "addLease";        
     }
 
     //Return pages that accepts a HallID
@@ -87,25 +133,47 @@ public class MainController {
 
     //Takes all of the attributes of a Student as parameters and inserts that student into the DB
    	@GetMapping("/addStudent/post")
-    public String postStudent(@RequestParam int StudentID, @RequestParam String StuName, @RequestParam String Address, @RequestParam String Phone, @RequestParam String Email, @RequestParam String Gender, @RequestParam String DOB, @RequestParam String Category, @RequestParam String ClassYear, @RequestParam String Major, @RequestParam String Minor, @RequestParam int AdvisorID, Model model) {	
-		String sql = "insert into Student values (?,?,?,?,?,?,?,?,?,?,?,?)";      
-		jdbcTemplate.update(sql, StudentID, StuName, Address, Phone, Email, Gender, DOB, Category, ClassYear, Major, Minor, AdvisorID);
+    public String postStudent(@RequestParam String StuName, @RequestParam String Address, @RequestParam String Phone, @RequestParam String Email, @RequestParam String Gender, @RequestParam String DOB, @RequestParam String Category, @RequestParam String ClassYear, @RequestParam String Major, @RequestParam String Minor, @RequestParam int AdvisorID, Model model) {	
+		String sql = "insert into Student values (?,?,?,?,?,?,?,?,?,?,?,?)";
+		String sqlId = "select max(studentid) from student";
+		int newId = jdbcTemplate.queryForObject(sqlId, Integer.class) + 1;
+			     
+		jdbcTemplate.update(sql, newId, StuName, Address, Phone, Email, Gender, DOB, Category, ClassYear, Major, Minor, AdvisorID);
         return "addStudent";
     }
 	
 	//Takes all of the attributes of a Staff as parameters and inserts that staff into the DB
 	@GetMapping("/addStaff/post")
-    public String postStaff(@RequestParam int StaffID, @RequestParam String StaffName, @RequestParam String Email, @RequestParam String Address, @RequestParam String DOB, @RequestParam String Gender, @RequestParam String Title, @RequestParam String Location, Model model) {
+    public String postStaff(@RequestParam String StaffName, @RequestParam String Email, @RequestParam String Address, @RequestParam String DOB, @RequestParam String Gender, @RequestParam String Title, @RequestParam String Location, Model model) {
         String sql = "insert into Staff values (?,?,?,?,?,?,?,?)";
-        jdbcTemplate.update(sql,StaffID, StaffName, Email, Address, DOB, Gender, Title, Location);
+		String sqlId = "select max(staffid) from staff";
+		int newId = jdbcTemplate.queryForObject(sqlId, Integer.class) + 1;
+
+        jdbcTemplate.update(sql,newId, StaffName, Email, Address, DOB, Gender, Title, Location);
         return "addStaff";
     }
 
     //Takes the attributes of a lease as input and inserts them into the DB
 	@GetMapping("/addLease/post")
-    public String postLease(@RequestParam int LeaseID, @RequestParam int Duration, @RequestParam String LName, @RequestParam float Cost, @RequestParam String StartDate, @RequestParam String EndDate, @RequestParam int StudentID, @RequestParam int RoomID, Model model) {
+    public String postLease(@RequestParam int Duration, @RequestParam String LName, @RequestParam float Cost, @RequestParam String StartDate, @RequestParam String EndDate, @RequestParam int StudentID, @RequestParam int RoomID, Model model) {
         String sql = "insert into Lease values (?,?,?,?,?,?,?,?)";
-        jdbcTemplate.update(sql,LeaseID, Duration, LName, Cost,StartDate,EndDate,StudentID,RoomID);
+		String sqlId = "select max(leaseid) from lease";
+        int newId = jdbcTemplate.queryForObject(sqlId, Integer.class) + 1;
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        java.sql.Date sqlSD;
+		java.sql.Date sqlED;
+
+		try {
+			java.util.Date SD = format.parse(StartDate);
+        	java.util.Date ED = format.parse(EndDate);
+        	sqlSD = new java.sql.Date(SD.getTime());
+        	sqlED = new java.sql.Date(ED.getTime());
+		} catch (Exception e) {
+			sqlSD = new java.sql.Date(new java.util.Date().getTime());
+			sqlED = new java.sql.Date(new java.util.Date().getTime());
+		}
+
+        jdbcTemplate.update(sql, newId, Duration, LName, Cost, sqlSD, sqlED, StudentID, RoomID);
         return "addLease";
     }
 
@@ -113,13 +181,28 @@ public class MainController {
     //Users can give input which then updates the room rent
 	@GetMapping("/updateRent")
     public String updateRent(Model model){
-       	 String sql = "select RoomID, RoomNum, Rent from room";
+       	String sql = "select RoomID, RoomNum, Rent, hallname from room join residence_hall using (hallid)";
+		String sql2 = "select RoomID, RoomNum, Rent, apartmentid from room join apartment using (apartmentid)";
 		
 		List<RoomDTO> rooms = jdbcTemplate.query(sql, new RowMapper<RoomDTO>() {
 			public RoomDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
-				return new RoomDTO(rs.getInt("RoomID"), rs.getInt("RoomNum"), rs.getInt("Rent"));
+				RoomDTO rm = new RoomDTO(rs.getInt("RoomID"), rs.getInt("RoomNum"), rs.getInt("Rent"));
+				rm.setLocation(rs.getString("hallname"));
+				return rm;
 			}
 		});
+
+		List<RoomDTO> apt = jdbcTemplate.query(sql2, new RowMapper<RoomDTO>() {
+            public RoomDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+                RoomDTO rm = new RoomDTO(rs.getInt("RoomID"), rs.getInt("RoomNum"), rs.getInt("Rent"));
+                rm.setLocation(rs.getString("apartmentid") + " - Apartment");
+                return rm;
+            }
+        });
+
+		for(RoomDTO rm : apt) {
+			rooms.add(rm);
+		}
 
 		model.addAttribute("rooms", rooms);
        	return "updateRent";               
@@ -130,8 +213,13 @@ public class MainController {
 	@GetMapping("/updateRent/update")
     public String updateRoomRent(@RequestParam float Rent, @RequestParam int RoomID, Model model){
        	String sql = "UPDATE room SET Rent = " + Rent + " WHERE RoomID = " + RoomID;
+
+		java.sql.Date sqlDate = new java.sql.Date(new java.util.Date().getTime());
+		String leaseSql = "update lease set cost = " + Rent + " where roomid = " + RoomID + " and startdate > " + "TO_DATE('" + sqlDate + "', 'yyyy-mm-dd')"; 		
+
 		jdbcTemplate.execute(sql);
-       		return "updateRent";               
+       	jdbcTemplate.execute(leaseSql);
+		return "updateRent";               
     }
 
 	//Returns list of students that the user can choose to delete
@@ -167,11 +255,12 @@ public class MainController {
 	@GetMapping("/hallInfo")
 	public String getHallInfo(Model model) {
 		String sql = "select hallname, staffname, phone from residence_hall join staff using (staffid)";
-		List<HallInfo> info = jdbcTemplate.query(sql, new RowMapper<HallInfo>() {
-			public HallInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
-				return new HallInfo(rs.getString("hallname"), rs.getString("staffname"), rs.getString("phone"));
+		List<HallInfoDTO> info = jdbcTemplate.query(sql, new RowMapper<HallInfoDTO>() {
+			public HallInfoDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+				return new HallInfoDTO(rs.getString("hallname"), rs.getString("staffname"), rs.getString("phone"));
 			}
 		});
+
 		model.addAttribute("info", info);
 		return "hallInfo";	
 	}
@@ -225,31 +314,31 @@ public class MainController {
 		String sql2 = "select lname, paymentdue, roomnum, apartmentid from invoice join lease using (leaseid) join room using (roomid) join apartment using (apartmentid) where datepaid is NULL";
 		String sql3 = "select sum(paymentdue) from invoice where datepaid is NULL";		
 
-		int sum = jdbcTemplate.queryForObject(sql3, Integer.class);
+		float sum = jdbcTemplate.queryForObject(sql3, Float.class);
 
-		List<UnpaidInfo> info = jdbcTemplate.query(sql, new RowMapper<UnpaidInfo>() {
-			public UnpaidInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+		List<UnpaidInfoDTO> info = jdbcTemplate.query(sql, new RowMapper<UnpaidInfoDTO>() {
+			public UnpaidInfoDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 				String lname = rs.getString("lname");
-				int paydue = rs.getInt("paymentdue");
+				float paydue = rs.getFloat("paymentdue");
 				int rnum = rs.getInt("roomnum");
 				String hname = rs.getString("hallname");
 				
-				return new UnpaidInfo(lname, paydue, rnum, hname);
+				return new UnpaidInfoDTO(lname, paydue, rnum, hname);
 			}
 		});
 
-		List<UnpaidInfo> apt = jdbcTemplate.query(sql2, new RowMapper<UnpaidInfo>() {
-            public UnpaidInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+		List<UnpaidInfoDTO> apt = jdbcTemplate.query(sql2, new RowMapper<UnpaidInfoDTO>() {
+            public UnpaidInfoDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
                 String lname = rs.getString("lname");
-                int paydue = rs.getInt("paymentdue");
+                float paydue = rs.getFloat("paymentdue");
                 int rnum = rs.getInt("roomnum");
                 String hname = "Apartment " + rs.getString("apartmentid");
 
-                return new UnpaidInfo(lname, paydue, rnum, hname);
+                return new UnpaidInfoDTO(lname, paydue, rnum, hname);
             }
         });
 
-		for(UnpaidInfo temp : apt) {
+		for(UnpaidInfoDTO temp : apt) {
 			info.add(temp);
 		}
 	
@@ -257,6 +346,8 @@ public class MainController {
 		model.addAttribute("unpaidInfo", info);
 		return "unpaidInfo";
 	}
+
+	
 
 	//Get the number of students associated with each living space type
 	//Categorize by class year and category

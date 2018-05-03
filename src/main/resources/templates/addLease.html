@@ -9,22 +9,22 @@
 
 		<script type="text/javascript">
 		    $( document ).ready(function() {
-				console.log("test");
+
 				$( "#newLease" ).on( "submit", function( event ) {
 					event.preventDefault();
 					$.get( "/addLease/post?"+$( this ).serialize() , function() {
 						alert( "Lease Saved!" );
+						document.location.href="/";
 					})
 				});
+
 		    })
       </script>
 
 	</head>
 	<body>
 		<form name="newLease" id="newLease">
-			<h1>Create a lease</h1>
-			<label>Lease ID </label>
-			<input name="LeaseID" required><hr>
+			<h1>Create a lease</h1><hr>
 			<label>Duration </label>
 			<select name="Duration">
 				<option value="1">One Semester</option>
@@ -33,15 +33,21 @@
 			<label>Student Name </label>
 			<input type="text" name="LName" required><hr>
 			<label>Monthly Cost </label>
-			<input type="text" name="Cost" required><hr>
+			<input type="text" name="Cost" required>
+			<a href="/updateRent">Check Rent</a><hr>
 			<label>Start Date </label>
 			<input type="date" name="StartDate" required><hr>
 			<label>End Date </label>
 			<input type="date" name="EndDate" required><hr>
-			<label>Student ID </label>
-			<input type="text" name="StudentID" required><hr>
-			<label>Room ID </label>
-			<input type="text" name="RoomID" required><hr>
+			<label>Student </label>
+			<select name="StudentID">
+				<option th:each="stu : ${student}" th:value="${stu.StudentID}" th:text="${stu.StuName}"></option>
+			</select><hr>
+			<label>Room </label>
+			<select name="RoomID">
+				<option th:each="rm : ${room}" th:value="${rm.RoomID}" th:text="${rm.Loc}"></option>
+			</select>
+			<a href="/vacantRooms">Vacant Rooms</a><hr>
 			<button type="submit">Submit!</button>
 		</form>
 	</body>

@@ -28,12 +28,14 @@
 		<table>
 			<tr>
 				<th>Room ID</th>
+				<th>Location</th>
 				<th>Room Number</th>
 				<th>Current Rent</th>
 				<th>New Rent</th>
 			</tr>
 			<tr th:each="r : ${rooms}">
 				<td th:text="${r.RoomID}"></td>
+				<td th:text="${r.Loc}"></td>
 				<td th:text="${r.RoomNumber}"></td>
 				<td th:text="${r.Rent}"></td>
 				<td><input type="text" th:id="''+ ${r.RoomID}"></td>
