@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <title>Add Student</title>
+        <script
+            src="https://code.jquery.com/jquery-3.3.1.js"
+            integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+            crossorigin="anonymous">
+        </script>
+
+		<script type="text/javascript">
+			$( document ).ready(function() {
+				$( "#newStudent" ).on( "submit", function( event ) {
+                    event.preventDefault();
+                    $.get( "/addStudent/post?"+$( this ).serialize() , function() {
+                    	alert( "Student Saved!" );
+						document.location.href="/";
+                    })
+                });
+			})
+		</script>
+	<head>
+	<body>
+
+		<form name="newStudent" id="newStudent">
+            <h1>Add Student</h1><hr>
+            <label>Student ID </label>
+            <input name="StudentID" required><hr>
+            <label>Name </label>
+            <input name=StuName required><hr>
+            <label>Email </label>
+            <input name="Email" required><hr>
+            <label>Address </label>
+            <input name="Address" required><hr>
+            <label>Phone Number </label>
+            <input name="Phone" required><hr>
+            <label>Date of Birth </label>
+            <input type="date" name="DOB" required><hr>
+            <label>Gender </label>
+            <select name="Gender">
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+            </select><hr>
+            <label>Category </label>
+            <select name="Category">
+                <option value="undergraduate">Undergraduate</option>
+                <option value="postgraduate">Postgraduate</option>
+            </select><hr>
+            <label>Class Year </label>
+            <select name="ClassYear">
+                <option value="first-year">First Year</option>
+                <option value="second-year">Second Year</option>
+                <option value="third-year">Third Year</option>
+                <option value="fourth-year">Fourth Year</option>
+            </select><hr>
+            <label>Major </label>
+            <input name="Major" required><hr>
+            <label>Minor </label>
+            <input name="Minor" required><hr>
+            <label>Advisor ID </label>
+			<select name="AdvisorID">
+				<option th:each="adv : ${advisor}" th:value="${adv.id}" th:text="${adv.info}"></option>
+			</select><hr>
+            <button type="submit">Submit!</button>
+        </form>
+
+	</body>
+</html>

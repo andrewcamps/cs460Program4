@@ -13,19 +13,29 @@
 				<th>Furnished Apartment</th>
 			</tr>
 			<tr>
-				<td>First-Year</td>
-				<td th:text="${leaseInfo.firstyear_hall}"></td>
-				<td th:text="${leaseInfo.firstyear_apt}"></td>
+				<td>First-Year Undergraduate</td>
+				<td th:text="${fyunh}"></td>
+				<td th:text="${fyuna}"></td>
 			</tr>
 			<tr>
-				<td>Undergraduate</td>
-				<td th:text="${leaseInfo.undergrad_hall}"></td>
-				<td th:text="${leaseInfo.undergrad_apt}"></td>
+				<td>Second-Year Undergraduate</td>
+				<td th:text="${syunh}"></td>
+				<td th:text="${syuna}"></td>
 			</tr>
+			<tr>
+                <td>Third-Year Undergraduate</td>
+                <td th:text="${tyunh}"></td>
+                <td th:text="${tyuna}"></td>
+            </tr>
+			<tr>
+                <td>Fourth-Year Undergraduate</td>
+                <td th:text="${fryunh}"></td>
+                <td th:text="${fryuna}"></td>
+            </tr>
 			<tr>
 				<td>Postgraduate</td>
-				<td th:text="${leaseInfo.grad_hall}"></td>
-				<td th:text="${leaseInfo.grad_apt}"></td>
+				<td th:text="${gh}"></td>
+				<td th:text="${ga}"></td>
 			</tr>
 		</table>
 	</body>

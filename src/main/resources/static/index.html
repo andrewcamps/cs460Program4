@@ -1,18 +1,52 @@
 <!DOCTYPE html>
 <html>
 	<head>
-    <title>Program4</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    	<title>Program 4</title>
+   		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	
+		<script
+            src="https://code.jquery.com/jquery-3.3.1.js"
+            integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+            crossorigin="anonymous">
+        </script>
+
+		<script type="text/javascript">
+			function addNavigate() {
+				window.location.href=document.getElementById("add").value;
+			}
+
+			function infoNavigate() {
+				window.location.href=document.getElementById("info").value;
+			}
+        </script>		
+
+
 	</head>
 	<body>
-		<a href="/addPerson">Add Student/Staff</a>
-		<a href="/addLease">Add Lease</a>
-		<a href="/updateRent">Update Rent</a>
-		<a href="/deleteStudent">Delete Student</a>
-		<a href="/hallInfo">Residence Hall Info</a>
-		<a href="/leaseInfo">Lease Info</a>
-		<a href="/unpaidInvoices">Unpaid Invoice Info</a>
-		<a href="/vacantRooms">Vacant Rooms</a>
-		<a href="/roomsList">Residence Hall Rooms</a>
+		<h1>University Residence Office</h1>
+		<h3>Add: 
+			<select id="add">
+				<option value="/addStudent">Student</option>
+				<option value="/addStaff">Staff</option>
+				<option value="/addLease">Lease</option>
+			</select>
+			<button onclick="javascript:addNavigate();">Go</button>
+		</h3><hr>
+		<h3>Update: 
+			<a href="/updateRent">Rent</a>
+		</h3><hr>
+		<h3>Delete: 
+			<a href="/deleteStudent">Student</a>
+		</h3><hr>
+		<h3>Get: 
+            <select id="info">
+				<option value="/hallInfo">Residence Hall Info</option>
+                <option value="/leaseInfo">Active Leases</option>
+                <option value="/unpaidInvoices">Unpaid Invoices</option>
+				<option value="vacantRooms">Vacant Rooms</option>
+                <option value="/roomsList">Residence Hall Rooms</option>
+            </select>
+            <button onclick="javascript:infoNavigate();">Go</button>
+        </h3><hr>
 	</body>
 </html>

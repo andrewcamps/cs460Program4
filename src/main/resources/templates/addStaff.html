@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Add Staff</title>
+        <script
+            src="https://code.jquery.com/jquery-3.3.1.js"
+            integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+            crossorigin="anonymous">
+        </script>
+
+		<script type="text/javascript">
+            $( document ).ready(function() {
+                $( "#newStaff" ).on( "submit", function( event ) {
+                    event.preventDefault();
+                    $.get( "/addStaff/post?"+$( this ).serialize(), function() {
+                        alert( "Staff Saved!" );
+						document.location.href="/";
+                    })
+                });
+            })
+        </script>
+	</head>
+	<body>
+
+		<form name="newStaff" id="newStaff">
+            <h1>Add Staff</h1><hr>
+            <label>Staff ID </label>
+            <input name="StaffID" required><hr>
+            <label>Name </label>
+            <input name="StaffName" required><hr>
+            <label>Email </label>
+            <input name="Email" required><hr>
+            <label>Address </label>
+            <input name="Address" required><hr>
+            <label>Date of Birth </label>
+            <input type="date" name="DOB" required><hr>
+            <label>Gender </label>
+            <select name="Gender">
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+            </select><hr>
+            <label>Title </label>
+            <select name="Title">
+                <option value="Hall Manager">Hall Manager</option>
+                <option value="Cleaner">Cleaner</option>
+                <option value="Administrative Assistant">Administrative Assistant</option>
+            </select><hr>
+            <label>Location </label>
+            <select name="Location">
+                <option value="Residence Office">Residence Office</option>
+                <option value="Residence Hall">Residence Hall</option>
+            </select><hr>
+            <button type="submit">Submit!</button>
+        </form>
+
+	</body>
+</html>

@@ -1,45 +1,46 @@
-<DOCTYPE! html>
+<!DOCTYPE html>
+<html>
 	<head>
 		<title> Add Lease </title>
 		<script
   		src="https://code.jquery.com/jquery-3.3.1.js"
   		integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
   		crossorigin="anonymous"></script>
+
 		<script type="text/javascript">
 		    $( document ).ready(function() {
-					console.log("test");
-					$( "#newLease" ).on( "submit", function( event ) {
-						event.preventDefault();
-						console.log( $( this ).serialize() );
-						$.get( "/addLease/postLease?"+$( this ).serialize() , function() {
-							alert( "Lease Saved!" );
-						})
-					});
+				console.log("test");
+				$( "#newLease" ).on( "submit", function( event ) {
+					event.preventDefault();
+					$.get( "/addLease/post?"+$( this ).serialize() , function() {
+						alert( "Lease Saved!" );
+					})
+				});
 		    })
-
       </script>
+
 	</head>
 	<body>
 		<form name="newLease" id="newLease">
 			<h1>Create a lease</h1>
-			<label>Lease ID</label>
+			<label>Lease ID </label>
 			<input name="LeaseID" required><hr>
-			<label>Duration</label>
+			<label>Duration </label>
 			<select name="Duration">
 				<option value="1">One Semester</option>
 				<option value="2">Two Semesters</option>
 			</select><hr>
-			<label>Person's Name</label>
+			<label>Student Name </label>
 			<input type="text" name="LName" required><hr>
-			<label>Monthly Cost</label>
+			<label>Monthly Cost </label>
 			<input type="text" name="Cost" required><hr>
-			<label>Start Date (DD/MM/YYYY)</label>
-			<input type="text" name="StartDate" required><hr>
-			<label>End Date (DD/MM/YYYY)</label>
-			<input type="text" name="EndDate" required><hr>
-			<label>Student ID</label>
+			<label>Start Date </label>
+			<input type="date" name="StartDate" required><hr>
+			<label>End Date </label>
+			<input type="date" name="EndDate" required><hr>
+			<label>Student ID </label>
 			<input type="text" name="StudentID" required><hr>
-			<label>Room ID</label>
+			<label>Room ID </label>
 			<input type="text" name="RoomID" required><hr>
 			<button type="submit">Submit!</button>
 		</form>
