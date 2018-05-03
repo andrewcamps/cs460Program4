@@ -52,9 +52,9 @@ public class MainController {
     }
 
 	@GetMapping("/addLease/postLease")
-    public String postLease(@RequestParam int LeaseID, @RequestParam int Duration, @RequestParam String LName, @RequestParam float Cost, @RequestParam String StartDate, @RequestParam int StudentID, @RequestParam int RoomID, Model model) {
-        String sql = "insert into Lease values (?,?,?,?,?,?,?)";
-        jdbcTemplate.update(sql,LeaseID, Duration, LName, Cost,StartDate,StudentID,RoomID);
+    public String postLease(@RequestParam int LeaseID, @RequestParam int Duration, @RequestParam String LName, @RequestParam float Cost, @RequestParam String StartDate, @RequestParam String EndDate, @RequestParam int StudentID, @RequestParam int RoomID, Model model) {
+        String sql = "insert into Lease values (?,?,?,?,?,?,?,?)";
+        jdbcTemplate.update(sql,LeaseID, Duration, LName, Cost,StartDate,EndDate,StudentID,RoomID);
         return "addLease";
     }
 
