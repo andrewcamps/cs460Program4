@@ -2,15 +2,15 @@ package program4;
 
 public class UnpaidInfo {
 
-	public String lname;
-	public int paydue;
-	public int rnum;
-	public String hname;	
+	public String StuName;
+	public int PayDue;
+	public int RoomNum;	
+	public String ResidenceHall;
 
-	UnpaidInfo(String lname, int paydue, int rnum, String hname) {
-		this.lname = lname;
-		this.paydue = paydue;
-		this.rnum = rnum;
-		this.hname = hname;
+	UnpaidInfo(String StuName, int PayDue,int RoomNum, String ResidenceHall) {
+		this.StuName = StuName;
+		this.PayDue = PayDue;
+		this.RoomNum = RoomNum;
+		this.ResidenceHall = ResidenceHall;
 	}
 }

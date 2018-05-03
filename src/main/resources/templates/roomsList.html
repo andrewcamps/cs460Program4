@@ -1,0 +1,25 @@
+<DOCTYPE! html>
+	<head>
+		<title> Get Residence Hall Rooms </title>
+		
+		<script
+  		src="https://code.jquery.com/jquery-3.3.1.js"
+  		integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  		crossorigin="anonymous">
+		</script>
+			
+		<script type="text/javascript">
+			$( document ).ready(function() {				
+			})
+			var getRooms = function(id){				
+					window.location.href = "/roomsList/getRooms?HallID=" + document.getElementById('HallID').value;			
+				}
+		</script>
+		
+	</head>
+	<body>	
+				<h1>Enter Residence Hall ID:</h1>
+				<input type="text" id="HallID">
+				<button onclick="getRooms()">Get Rooms</button>
+	</body>
+</html>
