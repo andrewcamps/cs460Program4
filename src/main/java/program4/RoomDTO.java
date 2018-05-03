@@ -1,5 +1,10 @@
 package program4;
-
+/*
+Authors: Garrett Seale, Andrew Camps
+CSC460
+Program 4
+RoomDTO.java: This class contains that attributes that need to be returned for pages/queries that display room info.
+*/
 public class RoomDTO {
 
 	public int RoomID;

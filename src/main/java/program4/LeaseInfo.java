@@ -1,5 +1,10 @@
 package program4;
-
+/*
+Authors: Garrett Seale, Andrew Camps
+CSC460
+Program 4
+LeaseInfo.java: Holds the lease attributes to be returned in the leaseInfo query/page
+*/
 public class LeaseInfo {
 
 	public int firstyear_hall;

@@ -1,5 +1,10 @@
 package program4;
-
+/*
+Authors: Garrett Seale, Andrew Camps
+CSC460
+Program 4
+UnpaidInfo.java: Holds attributes that need to be displayed on the unpaidLeases page.
+*/
 public class UnpaidInfo {
 
 	public String StuName;

@@ -1,5 +1,10 @@
 package program4;
-
+/*
+Authors: Garrett Seale, Andrew Camps
+CSC460
+Program 4
+HallInfo.java: Holds attributes to be return in the queries that require Residence Halls.
+*/
 public class HallInfo {
 	
     public String hname;
