@@ -14,10 +14,10 @@
 				<th>Residence Hall</th>
             </tr>
 			<tr th:each="info : ${unpaidInfo}">
-                <td th:text="${info.lname}"></td>
-                <td th:text="${info.paydue}"></td>
-                <td th:text="${info.rnum}"></td>
-                <td th:text="${info.hname}"></td>
+                <td th:text="${info.StuName}"></td>
+                <td th:text="${info.PayDue}"></td>
+                <td th:text="${info.RoomNum}"></td>
+                <td th:text="${info.ResidenceHall}"></td>
             </tr>
 			<tr>
 				<td><strong>Total: </strong></td>
