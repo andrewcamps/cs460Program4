@@ -62,7 +62,22 @@ public class MainController {
     public String addLease(){
         return "addLease";        
     }
-		
+	@GetMapping("/roomsList")
+    public String roomsList(){
+        return "roomsList";        
+    }
+    @GetMapping("/roomsList/getRooms")
+    public String getRooms(@RequestParam String HallID, Model model){
+       		 String sql = "select RoomID, RoomNum, Rent from room r,residence_hall h where r.HallID = h.HallID and r.HallID = '" + HallID + "'";
+		List<RoomDTO> rooms = jdbcTemplate.query(sql, new RowMapper<RoomDTO>() {
+			public RoomDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+				return new RoomDTO(rs.getInt("RoomID"), rs.getInt("RoomNum"), rs.getInt("Rent"));
+			}
+		});
+		model.addAttribute("rooms", rooms);
+       		return "getRooms";               
+    }
+
 	@GetMapping("/updateRent")
     public String updateRent(Model model){
        		 String sql = "select RoomID, RoomNum, Rent from room";
