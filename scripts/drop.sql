@@ -1,9 +1,0 @@
-drop table Advisor cascade constraints;
-drop table Apartment cascade constraints;
-drop table Staff cascade constraints;
-drop table Residence_Hall cascade constraints;
-drop table Room cascade constraints;
-drop table Inspection cascade constraints;
-drop table Student cascade constraints;
-drop table Lease cascade constraints;
-drop table Invoice cascade constraints;
