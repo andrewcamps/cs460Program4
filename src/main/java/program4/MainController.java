@@ -112,23 +112,60 @@ public class MainController {
     }
 
     //Return pages that accepts a HallID
-	@GetMapping("/roomsList")
-    public String roomsList(){
-        return "roomsList";        
+	@GetMapping("/roomInspections")
+    public String roomsList(Model model){
+		String sql = "select roomid, roomnum, rent, hallname from room join residence_hall using (hallid)";
+        String sql2 = "select roomid, roomnum, rent, apartmentid from room join apartment using (apartmentid)";
+
+		List<RoomDTO> rh = jdbcTemplate.query(sql, new RowMapper<RoomDTO>() {
+            public RoomDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+                int id = rs.getInt("roomid");
+                int rnum = rs.getInt("roomnum");
+                float rent = rs.getFloat("rent");
+                String info = rs.getString("hallname") + " - " + rnum;
+                RoomDTO rm = new RoomDTO(id, rnum, rent);
+
+                rm.setLocation(info);
+                return rm;
+            }
+        });
+
+        List<RoomDTO> apt = jdbcTemplate.query(sql2, new RowMapper<RoomDTO>() {
+            public RoomDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+                int id = rs.getInt("roomid");
+                int rnum = rs.getInt("roomnum");
+                float rent = rs.getFloat("rent");
+                String info = rs.getString("apartmentid") + " - " + "Room " + rnum;
+                RoomDTO rm = new RoomDTO(id, rnum, rent);
+
+                rm.setLocation(info);
+                return rm;
+            }
+        });
+
+        for(RoomDTO rm : apt) {
+            rh.add(rm);
+        }
+
+		model.addAttribute("room", rh);
+        return "roomInspections";        
     }
 
     //After a HallID is provided to the roomList page, return this page which gives a list of RoomDTOs and displays them as a table
-    @GetMapping("/roomsList/getRooms")
-    public String getRooms(@RequestParam String HallID, Model model){
+    @GetMapping("/roomInspections/getInspections")
+    public String getRooms(@RequestParam String RoomID, Model model){
     	//Select rooms that match the HallID
-       	String sql = "select RoomID, RoomNum, Rent from room r,residence_hall h where r.HallID = h.HallID and r.HallID = '" + HallID + "'";
-		List<RoomDTO> rooms = jdbcTemplate.query(sql, new RowMapper<RoomDTO>() {
-			public RoomDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
-				return new RoomDTO(rs.getInt("RoomID"), rs.getInt("RoomNum"), rs.getInt("Rent"));
+		String sql = "select inspectionid, dateinspected, staffname, satisfactorycondition, action from inspection join staff using (staffid) where roomid = " + RoomID;
+
+       	//String sql = "select RoomID, RoomNum, Rent from room r,residence_hall h where r.HallID = h.HallID and r.HallID = '" + HallID + "'";
+		List<InspectionDTO> insp = jdbcTemplate.query(sql, new RowMapper<InspectionDTO>() {
+			public InspectionDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+				return new InspectionDTO(rs.getInt("inspectionid"), rs.getString("dateinspected"), rs.getString("staffname"), rs.getString("satisfactorycondition"), rs.getString("action"));
 			}
 		});
-		model.addAttribute("rooms", rooms);
-       	return "getRooms";               
+
+		model.addAttribute("inspection", insp);
+       	return "getInspections";               
     }
 
     //Takes all of the attributes of a Student as parameters and inserts that student into the DB
@@ -215,7 +252,7 @@ public class MainController {
        	String sql = "UPDATE room SET Rent = " + Rent + " WHERE RoomID = " + RoomID;
 
 		java.sql.Date sqlDate = new java.sql.Date(new java.util.Date().getTime());
-		String leaseSql = "update lease set cost = " + Rent + " where roomid = " + RoomID + " and startdate > " + "TO_DATE('" + sqlDate + "', 'yyyy-mm-dd')"; 		
+		String leaseSql = "update lease set cost = " + Rent + " where roomid = " + RoomID + " and startdate > " + "TO_DATE('" + sqlDate + "', 'yyyy-MM-dd')"; 		
 
 		jdbcTemplate.execute(sql);
        	jdbcTemplate.execute(leaseSql);
@@ -270,9 +307,9 @@ public class MainController {
 	public String getVacantRooms(Model model) {
 		java.sql.Date sqlDate = new java.sql.Date(new java.util.Date().getTime());
 
-		String sql = "select roomid, roomnum, hallname, rent from (select roomid from room minus select roomid from lease where startdate <= TO_DATE('" + sqlDate + "', 'yyyy-mm-dd') and enddate >= TO_DATE('" + sqlDate + "', 'yyyy-mm-dd') group by roomid) join room using (roomid) join residence_hall using (hallid)";
-		String sql2 = "select roomid, roomnum, apartmentid, rent from (select roomid from room minus select roomid from lease where startdate <= TO_DATE('" + sqlDate + "', 'yyyy-mm-dd') and enddate >= TO_DATE('" + sqlDate + "', 'yyyy-mm-dd') group by roomid) join room using (roomid) join apartment using (apartmentid)";		
-		String sql3 = "select count(roomid) from (select roomid from room minus select roomid from lease where startdate <= TO_DATE('" + sqlDate + "', 'yyyy-mm-dd') and enddate >= TO_DATE('" + sqlDate + "', 'yyyy-mm-dd'))";
+		String sql = "select roomid, roomnum, hallname, rent from (select roomid from room minus select roomid from lease where startdate <= TO_DATE('" + sqlDate + "', 'yyyy-MM-dd') and enddate >= TO_DATE('" + sqlDate + "', 'yyyy-MM-dd') group by roomid) join room using (roomid) join residence_hall using (hallid)";
+		String sql2 = "select roomid, roomnum, apartmentid, rent from (select roomid from room minus select roomid from lease where startdate <= TO_DATE('" + sqlDate + "', 'yyyy-MM-dd') and enddate >= TO_DATE('" + sqlDate + "', 'yyyy-MM-dd') group by roomid) join room using (roomid) join apartment using (apartmentid)";		
+		String sql3 = "select count(roomid) from (select roomid from room minus select roomid from lease where startdate <= TO_DATE('" + sqlDate + "', 'yyyy-MM-dd') and enddate >= TO_DATE('" + sqlDate + "', 'yyyy-MM-dd'))";
 
 		List<RoomDTO> rm = jdbcTemplate.query(sql, new RowMapper<RoomDTO>() {
             public RoomDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -307,6 +344,7 @@ public class MainController {
 		model.addAttribute("count", count);
 		return "vacantRoom";
 	}
+
 	//Return list of all unpaid invoices and the student and room associated with them
 	@GetMapping("/unpaidInvoices")
 	public String unpaidInfo(Model model) {
@@ -355,16 +393,16 @@ public class MainController {
 	public String getLeaseInfo(Model model) {
 		java.sql.Date sqlDate = new java.sql.Date(new java.util.Date().getTime());
 		
-		String fyUnH = "select count(*) from lease join student using (studentid) join room using (roomid) join residence_hall using (hallid) where startdate <= TO_DATE('" + sqlDate + "', 'yyyy-mm-dd') and enddate >= TO_DATE('" + sqlDate + "', 'yyyy-mm-dd') and category = 'undergraduate' and classyear = 'first-year'";
-		String fyUnA = "select count(*) from lease join student using (studentid) join room using (roomid) join apartment using (apartmentid) where startdate <= TO_DATE('" + sqlDate + "', 'yyyy-mm-dd') and enddate >= TO_DATE('" + sqlDate + "', 'yyyy-mm-dd') and category = 'undergraduate' and classyear = 'first-year'";
-		String syUnH = "select count(*) from lease join student using (studentid) join room using (roomid) join residence_hall using (hallid) where startdate <= TO_DATE('" + sqlDate + "', 'yyyy-mm-dd') and enddate >= TO_DATE('" + sqlDate + "', 'yyyy-mm-dd') and category = 'undergraduate' and classyear = 'second-year'";
-		String syUnA = "select count(*) from lease join student using (studentid) join room using (roomid) join apartment using (apartmentid) where startdate <= TO_DATE('" + sqlDate + "', 'yyyy-mm-dd') and enddate >= TO_DATE('" + sqlDate + "', 'yyyy-mm-dd') and category = 'undergraduate' and classyear = 'second-year'";
-		String tyUnH = "select count(*) from lease join student using (studentid) join room using (roomid) join residence_hall using (hallid) where startdate <= TO_DATE('" + sqlDate + "', 'yyyy-mm-dd') and enddate >= TO_DATE('" + sqlDate + "', 'yyyy-mm-dd') and category = 'undergraduate' and classyear = 'third-year'";
-		String tyUnA = "select count(*) from lease join student using (studentid) join room using (roomid) join apartment using (apartmentid) where startdate <= TO_DATE('" + sqlDate + "', 'yyyy-mm-dd') and enddate >= TO_DATE('" + sqlDate + "', 'yyyy-mm-dd') and category = 'undergraduate' and classyear = 'third-year'";
-		String fryUnH = "select count(*) from lease join student using (studentid) join room using (roomid) join residence_hall using (hallid) where startdate <= TO_DATE('" + sqlDate + "', 'yyyy-mm-dd') and enddate >= TO_DATE('" + sqlDate + "', 'yyyy-mm-dd') and category = 'undergraduate' and classyear = 'fourth-year'";
-		String fryUnA = "select count(*) from lease join student using (studentid) join room using (roomid) join apartment using (apartmentid) where startdate <= TO_DATE('" + sqlDate + "', 'yyyy-mm-dd') and enddate >= TO_DATE('" + sqlDate + "', 'yyyy-mm-dd') and category = 'undergraduate' and classyear = 'fourth-year'";
-		String gH = "select count(*) from lease join student using (studentid) join room using (roomid) join residence_hall using (hallid) where startdate <= TO_DATE('" + sqlDate + "', 'yyyy-mm-dd') and enddate >= TO_DATE('" + sqlDate + "', 'yyyy-mm-dd') and category = 'postgraduate'";
-		String gA = "select count(*) from lease join student using (studentid) join room using (roomid) join apartment using (apartmentid) where startdate <= TO_DATE('" + sqlDate + "', 'yyyy-mm-dd') and enddate >= TO_DATE('" + sqlDate + "', 'yyyy-mm-dd') and category = 'postgraduate'";
+		String fyUnH = "select count(*) from lease join student using (studentid) join room using (roomid) join residence_hall using (hallid) where startdate <= TO_DATE('" + sqlDate + "', 'yyyy-M-dd') and enddate >= TO_DATE('" + sqlDate + "', 'yyyy-MM-dd') and category = 'undergraduate' and classyear = 'first-year'";
+		String fyUnA = "select count(*) from lease join student using (studentid) join room using (roomid) join apartment using (apartmentid) where startdate <= TO_DATE('" + sqlDate + "', 'yyyy-MM-dd') and enddate >= TO_DATE('" + sqlDate + "', 'yyyy-MM-dd') and category = 'undergraduate' and classyear = 'first-year'";
+		String syUnH = "select count(*) from lease join student using (studentid) join room using (roomid) join residence_hall using (hallid) where startdate <= TO_DATE('" + sqlDate + "', 'yyyy-MM-dd') and enddate >= TO_DATE('" + sqlDate + "', 'yyyy-MM-dd') and category = 'undergraduate' and classyear = 'second-year'";
+		String syUnA = "select count(*) from lease join student using (studentid) join room using (roomid) join apartment using (apartmentid) where startdate <= TO_DATE('" + sqlDate + "', 'yyyy-MM-dd') and enddate >= TO_DATE('" + sqlDate + "', 'yyyy-MM-dd') and category = 'undergraduate' and classyear = 'second-year'";
+		String tyUnH = "select count(*) from lease join student using (studentid) join room using (roomid) join residence_hall using (hallid) where startdate <= TO_DATE('" + sqlDate + "', 'yyyy-MM-dd') and enddate >= TO_DATE('" + sqlDate + "', 'yyyy-MM-dd') and category = 'undergraduate' and classyear = 'third-year'";
+		String tyUnA = "select count(*) from lease join student using (studentid) join room using (roomid) join apartment using (apartmentid) where startdate <= TO_DATE('" + sqlDate + "', 'yyyy-MM-dd') and enddate >= TO_DATE('" + sqlDate + "', 'yyyy-MM-dd') and category = 'undergraduate' and classyear = 'third-year'";
+		String fryUnH = "select count(*) from lease join student using (studentid) join room using (roomid) join residence_hall using (hallid) where startdate <= TO_DATE('" + sqlDate + "', 'yyyy-MM-dd') and enddate >= TO_DATE('" + sqlDate + "', 'yyyy-MM-dd') and category = 'undergraduate' and classyear = 'fourth-year'";
+		String fryUnA = "select count(*) from lease join student using (studentid) join room using (roomid) join apartment using (apartmentid) where startdate <= TO_DATE('" + sqlDate + "', 'yyyy-MM-dd') and enddate >= TO_DATE('" + sqlDate + "', 'yyyy-MM-dd') and category = 'undergraduate' and classyear = 'fourth-year'";
+		String gH = "select count(*) from lease join student using (studentid) join room using (roomid) join residence_hall using (hallid) where startdate <= TO_DATE('" + sqlDate + "', 'yyyy-MM-dd') and enddate >= TO_DATE('" + sqlDate + "', 'yyyy-MM-dd') and category = 'postgraduate'";
+		String gA = "select count(*) from lease join student using (studentid) join room using (roomid) join apartment using (apartmentid) where startdate <= TO_DATE('" + sqlDate + "', 'yyyy-MM-dd') and enddate >= TO_DATE('" + sqlDate + "', 'yyyy-MM-dd') and category = 'postgraduate'";
 		
 		int intFyUnH = jdbcTemplate.queryForObject(fyUnH, Integer.class);
 		int intFyUnA = jdbcTemplate.queryForObject(fyUnA, Integer.class);
@@ -390,4 +428,5 @@ public class MainController {
 
 		return "leaseInfo";	
 	}
+
 }

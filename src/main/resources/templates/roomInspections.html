@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Room Inspections</title>
+		
+		<script
+  		src="https://code.jquery.com/jquery-3.3.1.js"
+  		integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  		crossorigin="anonymous">
+		</script>
+			
+		<script type="text/javascript">				
+			function getInspections() {				
+				window.location.href = "/roomInspections/getInspections?RoomID=" + document.getElementById('RoomID').value;			
+			}
+		</script>
+		
+	</head>
+	<body>	
+		<h1>Select a Room For Inspection Data</h1>
+		<select id="RoomID">
+                <option th:each="rm : ${room}" th:value="${rm.RoomID}" th:text="${rm.Loc}"></option>
+		</select>
+		<button onclick="javascript:getInspections();">Inspections</button>
+	</body>
+</html>

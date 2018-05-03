@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Inpections</title>
+		
+		<script
+  		src="https://code.jquery.com/jquery-3.3.1.js"
+  		integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  		crossorigin="anonymous">
+		</script>
+			
+		<script type="text/javascript">
+			$( document ).ready(function() {	
+			})
+		</script>
+		
+	</head>
+	<body>
+		<table>
+			<h1>Inspections</h1>
+			<tr>
+				<th>Inspection ID</th>
+				<th>Inspection Date</th>
+				<th>Inspector</th>
+				<th>Satisfactory Condition</th>
+				<th>Action Taken</th>
+			</tr>
+			<tr th:each="insp : ${inspection}">
+				<td th:text="${insp.id}"></td>
+				<td th:text="${insp.date}"></td>
+				<td th:text="${insp.name}"></td>
+				<td th:text="${insp.status}"></td>
+				<td th:text="${insp.action}"></td>
+			</tr>
+		</table>
+	</body>
+</html>
