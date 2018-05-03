@@ -1,5 +1,11 @@
 package program4;
 
+/*
+Authors: Garrett Seale, Andrew Camps
+CSC460
+Program 4
+InspectionDTO.java: This class holds attributes for Inspections that need to be displayed on the getInspections page for a room.
+*/
 public class InspectionDTO {
 
 	public int id;
